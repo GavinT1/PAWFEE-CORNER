@@ -3,30 +3,32 @@ using UnityEngine;
 public class CustomerSpawner : MonoBehaviour
 {
     public GameObject customerPrefab;
-    public CafeTable[] tables; // Drag your scene tables here in the inspector
-    public float spawnInterval = 5.0f;
+    public CafeTable[] tables; 
+    public Transform spawnPoint; 
+    public float spawnInterval = 4.0f;
 
     void Start()
     {
-        InvokeRepeating("TrySpawnCustomer", 2.0f, spawnInterval);
+        InvokeRepeating("TrySpawnCustomer", 1.0f, spawnInterval);
     }
 
-   void TrySpawnCustomer()
-{
-    foreach (CafeTable table in tables)
+    void TrySpawnCustomer()
     {
-        if (!table.isOccupied)
+        foreach (CafeTable table in tables)
         {
-            Vector3 tablePos = table.transform.position;
+            if (!table.isOccupied)
+            {
+                table.isOccupied = true; 
 
-            Vector3 customerPos = new Vector3(tablePos.x + 1.5f, tablePos.y, tablePos.z);
-
-            GameObject newCustomer = Instantiate(customerPrefab, customerPos, Quaternion.identity);
-
-            table.ReceiveCustomer(newCustomer);
-
+                
+                GameObject newCustomer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+                
+                
+                InteractiveCustomer customerScript = newCustomer.GetComponent<InteractiveCustomer>();
+                customerScript.SetupCustomer(table.transform, table);
+                
+                break; 
+            }
         }
     }
-}
-
 }
