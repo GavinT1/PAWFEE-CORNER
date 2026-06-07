@@ -23,11 +23,9 @@ public class InteractiveCustomer : MonoBehaviour
     {
         if (isWalking && targetTable != null)
         {
-            
             Vector3 targetPos = new Vector3(targetTable.position.x + 1.2f, targetTable.position.y, targetTable.position.z);
             transform.position = Vector3.MoveTowards(transform.position, targetPos, walkSpeed * Time.deltaTime);
 
-            
             if (Vector3.Distance(transform.position, targetPos) < 0.1f)
             {
                 isWalking = false;
@@ -38,34 +36,25 @@ public class InteractiveCustomer : MonoBehaviour
 
     void ArrivedAtTable()
     {
-        
         orderBubble.SetActive(true);
     }
 
-   
-    private void OnMouseDown()
+    public void OnBubbleClicked()
     {
-        
-        if (orderBubble.activeSelf)
-        {
-            orderBubble.SetActive(false); // Hide the bubble
-            StartCoroutine(CookingAndEatingSequence());
-        }
+        orderBubble.SetActive(false); 
+        StartCoroutine(CookingAndEatingSequence());
     }
 
     IEnumerator CookingAndEatingSequence()
     {
-        
         yield return new WaitForSeconds(2.0f); 
 
-        Debug.Log("Customer is eating...");
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(3.0f); 
 
         Vector3 floorPos = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
         Instantiate(coinPrefab, floorPos, Quaternion.identity);
 
         tableComponent.isOccupied = false;
-
         Destroy(gameObject);
     }
 }
