@@ -1,29 +1,37 @@
 using UnityEngine;
-using System.Collections;
 
 public class CafeTable : MonoBehaviour
 {
+    public int tableID;
+    public bool isUnlocked = true;
     public bool isOccupied = false;
-    public float cookTime = 4.0f; 
-    private GameObject currentCustomer;
+    
+    [Header("Table Stats")]
+    public int tableLevel = 1;
+    public float baseEatTime = 3.0f;
+    public int baseCoinReward = 10;
+    public int baseXpReward = 5;
 
-    public void ReceiveCustomer(GameObject customer)
+    void Start()
     {
-        isOccupied = true;
-        currentCustomer = customer;
-        StartCoroutine(PrepareOrder());
+        if (!isUnlocked)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-    IEnumerator PrepareOrder()
+    public float GetCurrentEatTime()
     {
-        
-        yield return new WaitForSeconds(cookTime);
+        return Mathf.Max(1.0f, baseEatTime - (tableLevel * 0.3f));
+    }
 
-        
-        GameManager.Instance.AddRewards(10, 10); 
+    public int GetCurrentCoinReward()
+    {
+        return baseCoinReward + (tableLevel * 5);
+    }
 
-        
-        Destroy(currentCustomer);
-        isOccupied = false;
+    public int GetCurrentXpReward()
+    {
+        return baseXpReward + (tableLevel * 2);
     }
 }

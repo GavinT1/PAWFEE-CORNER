@@ -39,7 +39,8 @@ public class CustomerSpawner : MonoBehaviour
 
         foreach (CafeTable table in tables)
         {
-            if (!table.isOccupied)
+            
+            if (table.isUnlocked && !table.isOccupied)
             {
                 table.isOccupied = true; 
 
