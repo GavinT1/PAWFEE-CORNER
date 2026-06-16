@@ -3,49 +3,41 @@ using TMPro;
 
 public class UpgradeManager : MonoBehaviour
 {
-    public CafeTable table1;
-    public CafeTable table2;
+    [Header("Tables Reference")]
+    public CafeTable[] tables; 
 
-    [Header("UI Text Display")]
-    public TMP_Text table1ButtonText;
-    public TMP_Text table2ButtonText;
+    [Header("UI Buttons Text Display")]
+    public TMP_Text[] buttonTexts; 
 
-    private int table1UpgradeCost = 50;
-    private int table2UnlockCost = 150;
-    private int table2UpgradeCost = 60;
+    private int[] upgradeCosts = new int[] { 50, 60, 70, 80, 90 };
+    private int[] unlockCosts = new int[] { 0, 150, 300, 500, 800 }; 
 
     void Start()
     {
         UpdateUpgradeUI();
     }
 
-    public void OnClickRow1()
+    public void OnClickUpgradeRow(int index)
     {
-        if (GameManager.Instance.SpendCoins(table1UpgradeCost))
-        {
-            table1.tableLevel++;
-            table1UpgradeCost = Mathf.RoundToInt(table1UpgradeCost * 1.5f);
-            UpdateUpgradeUI();
-        }
-    }
+        if (index < 0 || index >= tables.Length) return;
 
-    public void OnClickRow2()
-    {
-        if (!table2.isUnlocked)
+        CafeTable targetTable = tables[index];
+
+        if (!targetTable.isUnlocked)
         {
-            if (GameManager.Instance.SpendCoins(table2UnlockCost))
+            if (GameManager.Instance.SpendCoins(unlockCosts[index]))
             {
-                table2.isUnlocked = true;
-                table2.gameObject.SetActive(true);
+                targetTable.isUnlocked = true;
+                targetTable.gameObject.SetActive(true);
                 UpdateUpgradeUI();
             }
         }
         else
         {
-            if (GameManager.Instance.SpendCoins(table2UpgradeCost))
+            if (GameManager.Instance.SpendCoins(upgradeCosts[index]))
             {
-                table2.tableLevel++;
-                table2UpgradeCost = Mathf.RoundToInt(table2UpgradeCost * 1.5f);
+                targetTable.tableLevel++;
+                upgradeCosts[index] = Mathf.RoundToInt(upgradeCosts[index] * 1.5f);
                 UpdateUpgradeUI();
             }
         }
@@ -53,15 +45,18 @@ public class UpgradeManager : MonoBehaviour
 
     void UpdateUpgradeUI()
     {
-        table1ButtonText.text = "Upgrade T1: " + table1UpgradeCost + " Coins";
+        for (int i = 0; i < tables.Length; i++)
+        {
+            if (i >= buttonTexts.Length) break;
 
-        if (!table2.isUnlocked)
-        {
-            table2ButtonText.text = "Buy Table 2: " + table2UnlockCost + " Coins";
-        }
-        else
-        {
-            table2ButtonText.text = "Upgrade T2: " + table2UpgradeCost + " Coins";
+            if (!tables[i].isUnlocked)
+            {
+                buttonTexts[i].text = "Buy Table " + (i + 1) + ": " + unlockCosts[i] + " Coins";
+            }
+            else
+            {
+                buttonTexts[i].text = "Upgrade T" + (i + 1) + ": " + upgradeCosts[i] + " Coins";
+            }
         }
     }
 }

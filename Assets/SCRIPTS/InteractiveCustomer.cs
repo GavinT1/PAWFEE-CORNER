@@ -8,10 +8,25 @@ public class InteractiveCustomer : MonoBehaviour
     
     private Transform targetDestination;
     private CafeTable tableComponent;
-    private float walkSpeed = 4f;
+    private float walkSpeed = 1.5f;
     private bool isWalking = false;
     private bool waitingInLine = true;
+    private bool isLeaving = false;
+    private bool isRoaming = false;
     private Vector3 specificTargetPos;
+    private Vector3 spawnExitPoint;
+
+    private int totalRoamingStops = 0;
+    private int currentRoamingStopCount = 0;
+
+    void Start()
+    {
+        spawnExitPoint = transform.position;
+        if (orderBubble != null)
+        {
+            orderBubble.SetActive(false); 
+        }
+    }
 
     void Update()
     {
@@ -23,9 +38,17 @@ public class InteractiveCustomer : MonoBehaviour
             {
                 isWalking = false;
                 
-                if (!waitingInLine)
+                if (!waitingInLine && !isLeaving && !isRoaming)
                 {
                     StartCoroutine(SettleAndShowBubble());
+                }
+                else if (isRoaming)
+                {
+                    StartCoroutine(PauseAndEvaluateNextMove());
+                }
+                else if (isLeaving)
+                {
+                    Destroy(gameObject);
                 }
             }
         }
@@ -37,6 +60,8 @@ public class InteractiveCustomer : MonoBehaviour
         specificTargetPos = spot.position;
         isWalking = true;
         waitingInLine = true;
+        isLeaving = false;
+        isRoaming = false;
     }
 
     public void AssignToTable(Transform tableTransform, CafeTable table)
@@ -44,9 +69,11 @@ public class InteractiveCustomer : MonoBehaviour
         targetDestination = tableTransform;
         tableComponent = table;
         waitingInLine = false;
+        isLeaving = false;
+        isRoaming = false;
         isWalking = true;
 
-        specificTargetPos = new Vector3(tableTransform.position.x + 1.5f, tableTransform.position.y, tableTransform.position.z);
+        specificTargetPos = new Vector3(tableTransform.position.x, tableTransform.position.y+ 1f, tableTransform.position.z);
     }
 
     IEnumerator SettleAndShowBubble()
@@ -57,8 +84,11 @@ public class InteractiveCustomer : MonoBehaviour
 
     public void OnBubbleClicked()
     {
-        orderBubble.SetActive(false); 
-        StartCoroutine(CookingAndEatingSequence());
+        if (orderBubble.activeSelf)
+        {
+            orderBubble.SetActive(false); 
+            StartCoroutine(CookingAndEatingSequence());
+        }
     }
 
     IEnumerator CookingAndEatingSequence()
@@ -68,7 +98,7 @@ public class InteractiveCustomer : MonoBehaviour
         float dynamicEatTime = tableComponent.GetCurrentEatTime();
         yield return new WaitForSeconds(dynamicEatTime); 
 
-        Vector3 floorPos = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+        Vector3 floorPos = new Vector3(transform.position.x- 0.5f, transform.position.y , transform.position.z);
         GameObject freshCoin = Instantiate(coinPrefab, floorPos, Quaternion.identity);
 
         Coin coinScript = freshCoin.GetComponent<Coin>();
@@ -78,6 +108,41 @@ public class InteractiveCustomer : MonoBehaviour
         }
 
         tableComponent.isOccupied = false;
-        Destroy(gameObject);
+
+        yield return new WaitForSeconds(0.2f);
+
+        totalRoamingStops = Random.Range(1, 4);
+        currentRoamingStopCount = 0;
+
+        isRoaming = true;
+        specificTargetPos = GetRandomFloorSpot();
+        isWalking = true;
+    }
+
+    IEnumerator PauseAndEvaluateNextMove()
+    {
+        yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
+
+        currentRoamingStopCount++;
+
+        if (currentRoamingStopCount < totalRoamingStops)
+        {
+            specificTargetPos = GetRandomFloorSpot();
+            isWalking = true;
+        }
+        else
+        {
+            isRoaming = false;
+            isLeaving = true;
+            specificTargetPos = spawnExitPoint;
+            isWalking = true;
+        }
+    }
+
+    Vector3 GetRandomFloorSpot()
+    {
+        float randomX = Random.Range(-2.5f, 2.5f);
+        float randomY = Random.Range(-2.0f, 1.5f);
+        return new Vector3(randomX, randomY, transform.position.z);
     }
 }
