@@ -49,7 +49,7 @@ public class MainMenuButtonScripts : MonoBehaviour
 
     public void OnCollectOilButtonClicked()
     {
-        Debug.Log("COLLECT OIL button clicked!");
+        if (DailyRewardManager.Instance != null) DailyRewardManager.Instance.OpenDailyReward();
     }
 
     public void OnCreditsButtonClicked()

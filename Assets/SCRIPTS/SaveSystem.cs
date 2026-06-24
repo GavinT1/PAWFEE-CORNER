@@ -79,8 +79,10 @@ public class SaveSystem : MonoBehaviour
 
 
         // Daily reward 
-        data.lastDailyRewardClaimed = "";
-        data.dailyRewardStreak      = 0;
+        data.lastDailyRewardClaimed = DailyRewardManager.Instance != null
+            ? DailyRewardManager.Instance.lastClaimedDate: "";
+        data.dailyRewardStreak      = DailyRewardManager.Instance != null
+            ? DailyRewardManager.Instance.currentStreak: 0;
 
         // Last session time
         data.lastSessionTime = System.DateTime.Now.ToString();
