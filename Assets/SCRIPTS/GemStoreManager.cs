@@ -1,18 +1,14 @@
 using UnityEngine;
 using System.Collections;
-using TMPro;
 
 public class GemStoreManager : MonoBehaviour
 {
+    [Header("Panels")]
     public GameObject gemStorePanel;       
     public GameObject successPanel;        
-    public TextMeshProUGUI gemCounterText; 
-
-    private int currentGems = 0;
 
     void Start()
     {
-        UpdateGemUI();
         if (gemStorePanel != null)
         {
             gemStorePanel.SetActive(false);
@@ -23,6 +19,7 @@ public class GemStoreManager : MonoBehaviour
         }
     }
 
+// -- OPEN/CLOSE ------------------------------------------------------------------------
     public void OpenGemStore()
     {
         if (gemStorePanel != null)
@@ -38,6 +35,8 @@ public class GemStoreManager : MonoBehaviour
             gemStorePanel.SetActive(false);
         }
     }
+
+//-- BUNDLE PURCHASES ------------------------------------------------------------------------
 
     public void BuyStarterBundle()
     {
@@ -59,21 +58,10 @@ public class GemStoreManager : MonoBehaviour
         ProcessFakePurchase(800);
     }
 
-    public bool HasEnoughGems(int amount)
-    {
-        return currentGems >= amount;
-    }
-
-    public void DeductGems(int amount)
-    {
-        currentGems -= amount;
-        UpdateGemUI();
-    }
-
+//--- CORE LOGIC ------------------------------------------------------------------------
     private void ProcessFakePurchase(int gemAmount)
     {
-        currentGems += gemAmount;
-        UpdateGemUI();
+        GameManager.Instance.AddGems(gemAmount);
 
         if (successPanel != null)
         {
@@ -87,13 +75,5 @@ public class GemStoreManager : MonoBehaviour
         successPanel.SetActive(true);
         yield return new WaitForSeconds(2.0f);
         successPanel.SetActive(false);
-    }
-
-    private void UpdateGemUI()
-    {
-        if (gemCounterText != null)
-        {
-            gemCounterText.text = "Gems: " + currentGems.ToString();
-        }
     }
 }

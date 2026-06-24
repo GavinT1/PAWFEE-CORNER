@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Day-Night Time Frame_0: -4741960441402008072
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

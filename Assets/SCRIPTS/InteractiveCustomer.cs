@@ -3,9 +3,9 @@ using System.Collections;
 
 public class InteractiveCustomer : MonoBehaviour
 {
-    public GameObject orderBubble; 
-    public GameObject coinPrefab;   
-    
+    public GameObject orderBubble;
+    public GameObject coinPrefab;
+
     private Transform targetDestination;
     private CafeTable tableComponent;
     private float walkSpeed = 1.5f;
@@ -23,21 +23,23 @@ public class InteractiveCustomer : MonoBehaviour
     {
         spawnExitPoint = transform.position;
         if (orderBubble != null)
-        {
-            orderBubble.SetActive(false); 
-        }
+            orderBubble.SetActive(false);
     }
 
     void Update()
     {
         if (isWalking)
         {
-            transform.position = Vector3.MoveTowards(transform.position, specificTargetPos, walkSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                specificTargetPos,
+                walkSpeed * Time.deltaTime
+            );
 
             if (Vector3.Distance(transform.position, specificTargetPos) < 0.1f)
             {
                 isWalking = false;
-                
+
                 if (!waitingInLine && !isLeaving && !isRoaming)
                 {
                     StartCoroutine(SettleAndShowBubble());
@@ -54,71 +56,90 @@ public class InteractiveCustomer : MonoBehaviour
         }
     }
 
+    // ── MOVEMENT ───────────────────────────────────
     public void MoveToQueueSpot(Transform spot)
     {
-        targetDestination = spot;
-        specificTargetPos = spot.position;
-        isWalking = true;
-        waitingInLine = true;
-        isLeaving = false;
-        isRoaming = false;
+        targetDestination   = spot;
+        specificTargetPos   = spot.position;
+        isWalking           = true;
+        waitingInLine       = true;
+        isLeaving           = false;
+        isRoaming           = false;
     }
 
     public void AssignToTable(Transform tableTransform, CafeTable table)
     {
-        targetDestination = tableTransform;
-        tableComponent = table;
-        waitingInLine = false;
-        isLeaving = false;
-        isRoaming = false;
-        isWalking = true;
+        targetDestination   = tableTransform;
+        tableComponent      = table;
+        waitingInLine       = false;
+        isLeaving           = false;
+        isRoaming           = false;
+        isWalking           = true;
 
-        specificTargetPos = new Vector3(tableTransform.position.x, tableTransform.position.y+ 1f, tableTransform.position.z);
+        specificTargetPos = new Vector3(
+            tableTransform.position.x,
+            tableTransform.position.y + 1f,
+            tableTransform.position.z
+        );
     }
 
+    // ── ORDER SEQUENCE ─────────────────────────────
     IEnumerator SettleAndShowBubble()
     {
-        yield return new WaitForSeconds(1.0f); 
-        orderBubble.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
+        if (orderBubble != null)
+            orderBubble.SetActive(true);
     }
 
     public void OnBubbleClicked()
     {
-        if (orderBubble.activeSelf)
+        if (orderBubble != null && orderBubble.activeSelf)
         {
-            orderBubble.SetActive(false); 
+            orderBubble.SetActive(false);
             StartCoroutine(CookingAndEatingSequence());
         }
     }
 
     IEnumerator CookingAndEatingSequence()
     {
-        yield return new WaitForSeconds(2.0f); 
+        yield return new WaitForSeconds(2.0f);
 
         float dynamicEatTime = tableComponent.GetCurrentEatTime();
-        yield return new WaitForSeconds(dynamicEatTime); 
+        yield return new WaitForSeconds(dynamicEatTime);
 
-        Vector3 floorPos = new Vector3(transform.position.x- 0.5f, transform.position.y , transform.position.z);
-        GameObject freshCoin = Instantiate(coinPrefab, floorPos, Quaternion.identity);
+        // Spawn coin
+        Vector3 coinPos = new Vector3(
+            transform.position.x - 0.5f,
+            transform.position.y,
+            transform.position.z
+        );
+        GameObject freshCoin = Instantiate(coinPrefab, coinPos, Quaternion.identity);
 
         Coin coinScript = freshCoin.GetComponent<Coin>();
         if (coinScript != null)
-        {
             coinScript.coinValue = tableComponent.GetCurrentCoinReward();
-        }
+
+        // Notify Animal Stars of successful service
+        if (AnimalStarsManager.Instance != null)
+            AnimalStarsManager.Instance.RecordSuccessfulService();
+
+        // XP reward
+        if (GameManager.Instance != null)
+            GameManager.Instance.AddXP(tableComponent.GetCurrentXpReward());
 
         tableComponent.isOccupied = false;
 
         yield return new WaitForSeconds(0.2f);
 
-        totalRoamingStops = Random.Range(1, 4);
+        // Start roaming phase
+        totalRoamingStops       = Random.Range(1, 4);
         currentRoamingStopCount = 0;
-
-        isRoaming = true;
-        specificTargetPos = GetRandomFloorSpot();
-        isWalking = true;
+        isRoaming               = true;
+        specificTargetPos       = GetRandomFloorSpot();
+        isWalking               = true;
     }
 
+    // ── ROAMING ────────────────────────────────────
     IEnumerator PauseAndEvaluateNextMove()
     {
         yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
@@ -132,10 +153,10 @@ public class InteractiveCustomer : MonoBehaviour
         }
         else
         {
-            isRoaming = false;
-            isLeaving = true;
+            isRoaming         = false;
+            isLeaving         = true;
             specificTargetPos = spawnExitPoint;
-            isWalking = true;
+            isWalking         = true;
         }
     }
 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      TitlePawfeeTransparent_0: 975565224627906065
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

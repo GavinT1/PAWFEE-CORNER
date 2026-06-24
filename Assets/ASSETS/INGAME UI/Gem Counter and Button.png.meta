@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Gem Counter and Button_0: 3336464702453982673
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

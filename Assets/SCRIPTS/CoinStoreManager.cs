@@ -1,19 +1,15 @@
 using UnityEngine;
 using System.Collections;
-using TMPro;
+
 
 public class CoinStoreManager : MonoBehaviour
 {
-    public GemStoreManager gemStore;
+    [Header("Panels")]
     public GameObject coinStorePanel;
     public GameObject successPanel;
-    public TextMeshProUGUI coinCounterText;
-
-    private int currentCoins = 0;
 
     void Start()
     {
-        UpdateCoinUI();
         if (coinStorePanel != null)
         {
             coinStorePanel.SetActive(false);
@@ -24,6 +20,7 @@ public class CoinStoreManager : MonoBehaviour
         }
     }
 
+// -- OPEN/CLOSE ------------------------------------------------------------------------
     public void OpenCoinStore()
     {
         if (coinStorePanel != null)
@@ -40,6 +37,7 @@ public class CoinStoreManager : MonoBehaviour
         }
     }
 
+//-- COIN BUNDLE PURCHASES ------------------------------------------------------------------------
     public void BuyCoinPouch()
     {
         ProcessCoinPurchase(20, 500);
@@ -55,13 +53,12 @@ public class CoinStoreManager : MonoBehaviour
         ProcessCoinPurchase(200, 6000);
     }
 
+//-- CORE LOGIC ------------------------------------------------------------------------
     private void ProcessCoinPurchase(int gemCost, int coinReward)
     {
-        if (gemStore != null && gemStore.HasEnoughGems(gemCost))
+        if (GameManager.Instance.SpendGems(gemCost))
         {
-            gemStore.DeductGems(gemCost);
-            currentCoins += coinReward;
-            UpdateCoinUI();
+            GameManager.Instance.AddCoins(coinReward);
 
             if (successPanel != null)
             {
@@ -80,13 +77,5 @@ public class CoinStoreManager : MonoBehaviour
         successPanel.SetActive(true);
         yield return new WaitForSeconds(2.0f);
         successPanel.SetActive(false);
-    }
-
-    private void UpdateCoinUI()
-    {
-        if (coinCounterText != null)
-        {
-            coinCounterText.text = "Coins: " + currentCoins.ToString();
-        }
     }
 }
