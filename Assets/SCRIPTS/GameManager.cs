@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public int gems = 0;
     public int xp = 0;
 
+    [Header("Booster")]
+    public int boosterCharges = 0;
+
     [Header("UI Elements")]
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI gemText;
@@ -114,6 +117,26 @@ public class GameManager : MonoBehaviour
         coins += coinAmount;
         xp += xpAmount;
         UpdateUI();
+    }
+
+    public void AddBoosterCharge()
+    {
+        boosterCharges++;
+        Debug.Log("Booster charges: " + boosterCharges);
+        SaveGame();
+    }
+
+    public bool UseBoosterCharge()
+    {
+        if (boosterCharges <= 0)
+        {
+            Debug.Log("No booster Charges available!");
+            return false;
+        }
+
+    boosterCharges--;
+    SaveGame();
+    return true;
     }
 
 // --- UI ------------------------------------------------------------------------

@@ -20,6 +20,7 @@ public class GameData
 
     // Booster
     public bool is2xActive;
+    public int boosterCharges;
     public string boosterEndTime;
 
     // Idle earnings
@@ -83,6 +84,9 @@ public class SaveSystem : MonoBehaviour
             ? DailyRewardManager.Instance.lastClaimedDate: "";
         data.dailyRewardStreak      = DailyRewardManager.Instance != null
             ? DailyRewardManager.Instance.currentStreak: 0;
+
+        // BoosterCharge
+        data.boosterCharges = GameManager.Instance.boosterCharges;
 
         // Last session time
         data.lastSessionTime = System.DateTime.Now.ToString();

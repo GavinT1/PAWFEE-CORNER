@@ -121,8 +121,8 @@ public class DailyRewardManager : MonoBehaviour
             break;
 
             case 2: 
-
-                Debug.Log("Reward: Speed Booster activated");
+                GameManager.Instance.AddBoosterCharge();
+                Debug.Log("Reward: Speed Booster added to inventory! ");
             break;
 
             case 3:
