@@ -8,7 +8,7 @@ public class LevelSystem : MonoBehaviour
 
     [Header("UI References")]
     public TextMeshProUGUI levelText;
-    public UnityEngine.UI.Image xpBarFill;
+    public UnityEngine.UI.Slider xpSlider;
 
     [Header("Level Settings")]
     public int currentLevel = 1 ;
@@ -118,7 +118,12 @@ public class LevelSystem : MonoBehaviour
     public void UpdateLevelUI()
     {
         if (levelText != null) levelText.text = "level " + currentLevel;
-        if(xpBarFill != null) xpBarFill.fillAmount = GetXPBarProgress();
+        if(xpSlider != null)
+        {
+            xpSlider.minValue = 0f;
+            xpSlider.maxValue = 1f;
+            xpSlider.value = GetXPBarProgress();
+        }
     }
 
     public void RefreshUI()

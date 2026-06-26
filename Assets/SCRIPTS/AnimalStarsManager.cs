@@ -18,7 +18,7 @@ public class AnimalStarsManager : MonoBehaviour
 
     [Header("Passive Recovery")]
     private float passiveTimer = 0f;
-    private const float RecoveryInterval = 90f;
+    private const float RecoveryInterval = 75f;
     private const float PassiveReward = 0.25f;
 
     private void Awake()
@@ -76,13 +76,15 @@ public class AnimalStarsManager : MonoBehaviour
 
         if(currentServingStreak == 5)
         {
+            float bonus = animalStars < 2.5f ? 0.15f : 0.25f;
             AddStars(0.25f);
-            Debug.Log("Streak Milestone! 5 customers served (+0.25 Stars).");
+            Debug.Log("Streak: 5 customers served (+ "+bonus+" 0.25 Stars).");
         }
         else if (currentServingStreak == 10)
-        {
+        {   
+            float bonus = animalStars < 2.5 ? 0.25f : 0.5f;
             AddStars(0.50f);
-            Debug.Log("Streak Milestone! 10 customers served (+0.50 Stars). Resetting streak counter");
+            Debug.Log("Streak: ! 10 customers served ("+bonus+" 0.50 Stars). Resetting streak counter");
             currentServingStreak = 0;
         }
     }
@@ -93,18 +95,15 @@ public class AnimalStarsManager : MonoBehaviour
         if (animalStars >= 3.5f) return 1.2f;
         if (animalStars >= 2.5f) return 1.0f;
         if (animalStars >= 1.5f) return 0.7f;
-        return 0.4f; // for 1.0 - 1.4 stars
+        return 0.8f; // for 1.0 - 1.4 stars
     }
 
     // called by customerspawner to slowdown if reputation drops
     public float GetSpawnRateMultiplier()
     {
-        // under 2.5 stars, customer arrival delays 
-        if(animalStars < 2.5f)
-        {
-            return 0.6f; // runs 60% of normal efficiency
-        }
-        return 1.0f; // Normal operation speed
+    
+        if(animalStars < 1.5f) return 0.6f;
+        return 1.0f; 
     }
 
     //--- SYSTEM ARCHITECTURE-------------------------------------------\
@@ -130,14 +129,9 @@ public class AnimalStarsManager : MonoBehaviour
         {
             GameData data = SaveSystem.Instance.Load();
 
-            if (data.animalStars >= MinStars && data.animalStars <= MaxStars)
-            {
-                animalStars = data.animalStars;
-            }
+            if (data.animalStars >= MinStars && data.animalStars <= MaxStars) animalStars = data.animalStars;
             else
-            {
                 animalStars = 1.0f;
-            }
         }
     }
 }
