@@ -48,7 +48,28 @@ public class UpgradeManager : MonoBehaviour
     }
 
     void Start()
-    {
+    {   
+        if (SaveSystem.Instance != null)
+        {
+            GameData data = SaveSystem.Instance.Load();
+            
+            // Check if a saved file array exists and matches our scene layout array size
+            if (data != null && data.tableUnlockedStates != null && data.tableUnlockedStates.Length == tables.Length)
+            {
+                for (int i = 0; i < tables.Length; i++)
+                {
+                    if (tables[i] != null)
+                    {
+                        tables[i].isUnlocked = data.tableUnlockedStates[i];
+                        tables[i].tableLevel = data.tableTiers[i];
+                        
+                        // Physically toggle the table gameobject active/inactive in your scene space
+                        tables[i].gameObject.SetActive(data.tableUnlockedStates[i]);
+                    }
+                }
+            }
+        }
+        
         UpdateUpgradeUI();
     }
 
@@ -70,6 +91,7 @@ public class UpgradeManager : MonoBehaviour
                 targetTable.gameObject.SetActive(true);
                 GameManager.Instance.AddXP(25);
                 UpdateUpgradeUI();
+                if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
             }
             else
             {
@@ -106,6 +128,9 @@ public class UpgradeManager : MonoBehaviour
             targetTable.tableLevel++;
             GameManager.Instance.AddXP(25);
             UpdateUpgradeUI();
+
+            if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+
             Debug.Log("Table " + (index + 1)
                 + " upgraded to Tier " + targetTable.tableLevel);
         }
@@ -170,5 +195,25 @@ public class UpgradeManager : MonoBehaviour
     public void OnPlayerLevelUp()
     {
         UpdateUpgradeUI();
+    }
+
+    public bool[] GetTableUnlockStates()
+    {
+        bool[] states = new bool[tables.Length];
+        for (int i = 0; i < tables.Length; i++)
+        {
+            states[i] = tables[i] != null ? tables[i].isUnlocked : false;
+        }
+        return states;
+    }
+
+    public int[] GetTableTiers()
+    {
+        int[] tiers = new int[tables.Length];
+        for (int i = 0; i < tables.Length; i++)
+        {
+            tiers[i] = tables[i] != null ? tables[i].tableLevel : 1;
+        }
+        return tiers;
     }
 }

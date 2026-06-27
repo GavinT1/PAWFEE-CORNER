@@ -14,7 +14,6 @@ public class GameData
     public int currentLevel;
 
     // Upgrades
-    public int tableLevel;
     public int kitchenLevel;
     public int staffLevel;
     public int recipeLevel;
@@ -39,8 +38,11 @@ public class GameData
     public bool sfxOn;
 
     // recipe
-
     public bool[] recipeUnlocks;
+
+    // tables
+    public bool[] tableUnlockedStates;
+    public int [] tableTiers;
 }
 
 public class SaveSystem : MonoBehaviour
@@ -78,6 +80,13 @@ public class SaveSystem : MonoBehaviour
         data.currentLevel = LevelSystem.Instance != null
             ? LevelSystem.Instance.currentLevel
             : 1;
+
+        // Tables
+        if (UpgradeManager.Instance != null)
+        {
+            data.tableUnlockedStates = UpgradeManager.Instance.GetTableUnlockStates();
+            data.tableTiers = UpgradeManager.Instance.GetTableTiers();
+        }
 
         // Animal Stars
         data.animalStars = AnimalStarsManager.Instance != null
@@ -151,7 +160,6 @@ public class SaveSystem : MonoBehaviour
             gems                   = 0,
             xp                     = 0,
             currentLevel           = 1,
-            tableLevel             = 1,
             kitchenLevel           = 1,
             staffLevel             = 1,
             recipeLevel            = 1,
@@ -163,7 +171,9 @@ public class SaveSystem : MonoBehaviour
             animalStars            = 1.0f,
             musicOn                = true,
             sfxOn                  = true,
-            recipeUnlocks = new bool[] { true, false, false, false, false}
+            recipeUnlocks = new bool[] { true, false, false, false, false},
+            tableUnlockedStates    = new bool[] { true, false, false, false, false }, // First table is unlocked
+            tableTiers             = new int[] { 1, 1, 1, 1, 1 },  
         };
     }
 
