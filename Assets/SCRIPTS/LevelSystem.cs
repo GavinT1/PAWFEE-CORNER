@@ -66,6 +66,10 @@ public class LevelSystem : MonoBehaviour
 
         // refresh upgrade buttons when level change
         if (UpgradeManager.Instance != null) UpgradeManager.Instance.OnPlayerLevelUp();
+
+        // Automatically updates card colors/unlocks the moment the level changes
+        if (RecipeManager.Instance != null) RecipeManager.Instance.RefreshRecipeUI();
+    
     }
 
     //--- LEVEL UP EVENT -----------------------------------------------

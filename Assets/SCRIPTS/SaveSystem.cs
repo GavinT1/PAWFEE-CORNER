@@ -93,8 +93,10 @@ public class SaveSystem : MonoBehaviour
         data.lastSessionTime = System.DateTime.Now.ToString();
 
         // Settings
-        data.musicOn = true;
-        data.sfxOn   = true;
+        data.musicOn = SettingsManager.Instance != null
+            ? SettingsManager.Instance.musicToggle.isOn: true;
+        data.sfxOn   = SettingsManager.Instance != null
+            ? SettingsManager.Instance.sfxToggle.isOn: true;
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
