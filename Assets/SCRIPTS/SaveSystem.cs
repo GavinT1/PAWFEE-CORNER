@@ -37,6 +37,10 @@ public class GameData
     // Settings
     public bool musicOn;
     public bool sfxOn;
+
+    // recipe
+
+    public bool[] recipeUnlocks;
 }
 
 public class SaveSystem : MonoBehaviour
@@ -98,6 +102,16 @@ public class SaveSystem : MonoBehaviour
         data.sfxOn   = SettingsManager.Instance != null
             ? SettingsManager.Instance.sfxToggle.isOn: true;
 
+        // saving recipes
+        if (RecipeManager.Instance != null)
+        {
+            data.recipeUnlocks = RecipeManager.Instance.GetRecipeUnlockStates();
+        }
+        else
+        {
+            data.recipeUnlocks = new bool[]{ true, false, false, false, false};
+        }
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
         Debug.Log("Game saved to: " + savePath);
@@ -148,7 +162,8 @@ public class SaveSystem : MonoBehaviour
             dailyRewardStreak      = 0,
             animalStars            = 1.0f,
             musicOn                = true,
-            sfxOn                  = true
+            sfxOn                  = true,
+            recipeUnlocks = new bool[] { true, false, false, false, false}
         };
     }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Data.Common;
 
 public class RecipeManager : MonoBehaviour
 {
@@ -47,6 +48,16 @@ public class RecipeManager : MonoBehaviour
     {
         if (recipePanel != null)
             recipePanel.SetActive(false);
+
+        if (SaveSystem.Instance != null)
+        {
+            GameData loadedData = SaveSystem.Instance.Load();
+            if (loadedData != null && loadedData.recipeUnlocks != null && loadedData.recipeUnlocks.Length == isRecipePurchased.Length)
+            {
+                isRecipePurchased = loadedData.recipeUnlocks;
+            }
+            
+        }
     }
 
     // --- OPEN / CLOSE -------------------------
@@ -181,8 +192,50 @@ public class RecipeManager : MonoBehaviour
         }
     }
 
+    //---PURCHASE LOGIC CALLED BY AVAIL RECIPE BUTTON--------------
+    public void BuySelectedRecipe()
+    {
+        int index = currentlySelectedRecipeIndex;
 
+        // Safety check
+        if (index < 0 || index >= recipeNames.Length) return;
 
+        // If bought, do nothing
+        if (isRecipePurchased[index]) return;
 
+        int cost = recipePurchaseCosts[index];
+
+        // 1. Verify if your GameManager has enough coins to pay for it
+        if (GameManager.Instance != null && GameManager.Instance.coins >= cost)
+        {
+            // 2. Deduct the currency from your GameManager data
+            GameManager.Instance.coins -= cost;
+
+            // 3. Mark the recipe index as permanently unlocked
+            isRecipePurchased[index] = true;
+
+            // 4. Force all UI components to redraw with the updated unlock state
+            RefreshRecipeUI();
+            SelectRecipeCard(index);
+
+            Debug.Log("Successfully learned recipe: " + recipeNames[index]);
+            
+            if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+        }
+        else
+        {
+            Debug.Log("Not enough Coins to buy " + recipeNames[index] + "! Missing: " + (cost - (GameManager.Instance != null ? GameManager.Instance.coins : 0)));
+        }
+    }
+
+    //--- DATA EXPORTER ACCESSED BY THE SAVE SYSTEM ------------------
+    public bool[] GetRecipeUnlockStates()
+    {
+        return isRecipePurchased;
+    }
 
 }
+
+
+
+
