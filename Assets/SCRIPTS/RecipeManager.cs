@@ -6,36 +6,32 @@ public class RecipeManager : MonoBehaviour
 {
     public static RecipeManager Instance;
 
-    [Header("Panel")]
+    [Header("Main Panel")]
     public GameObject recipePanel;
 
-    [Header("Recipe Cards — assign 5 cards in order")]
+    [Header("Recipe Cards")]
     public Image[]            cardBGs;
     public Image[]            foodImages;
     public TextMeshProUGUI[]  nameTexts;
     public TextMeshProUGUI[]  statusTexts;
 
-    [Header("Food Sprites — assign in order")]
+    [Header("Top Info Area")]
+    public Image infoFoodImage;
+    public TextMeshProUGUI infoDescriptionText;
+    public TextMeshProUGUI infoStatsText;
+    public GameObject infoLearnButton;
+
+    [Header("Food Sprites")]
     public Sprite[] foodSprites;
-
-    private string[] recipeNames = new string[]
-    {
-        "Coffee",
-        "Tea",
-        "Muffin",
-        "Pancakes",
-        "Special Pawfee"
-    };
-
-    private int[] recipeUnlockLevels = new int[]
-    {
-        1,   // Coffee
-        2,   // Tea
-        3,   // Muffin
-        5,   // Pancakes
-        7    // Special Pawfee
-    };
-
+    private string[] recipeNames = new string[] {"Coffee","Tea","Muffin","Pancakes","Special Pawfee"};
+    private int[] recipeUnlockLevels = new int[]{1, 2, 3, 5, 7};
+    private int[] recipePrepTimes = new int[]{5, 6, 8, 10, 12 };
+    private int[] recipeCoinRewards = new int[]{20, 25, 35,50,75};
+    private int[] recipePurchaseCosts = new int[] { 100, 800, 6000, 45000, 30000};
+    
+    private bool[] isRecipePurchased = new bool[] {true, false, false, false,false};
+    private int currentlySelectedRecipeIndex = 0;
+    
     // Card colors
     private Color unlockedColor  = new Color(0.84f, 0.97f, 0.88f); // soft green
     private Color nextColor      = new Color(1.0f,  0.97f, 0.84f); // soft amber
@@ -60,6 +56,7 @@ public class RecipeManager : MonoBehaviour
             recipePanel.SetActive(true);
 
         RefreshRecipeUI();
+        SelectRecipeCard(0);
     }
 
     public void CloseRecipePanel()
@@ -130,4 +127,62 @@ public class RecipeManager : MonoBehaviour
             }
         }
     }
+
+        //---CLICK SELECTION TRIGGERED BY CARDS
+    public void SelectRecipeCard(int index)
+    {
+        currentlySelectedRecipeIndex = index;
+
+        // top are illustration
+        if (infoFoodImage != null)
+        {
+            if (index < foodSprites.Length && foodSprites[index] != null)
+            {
+                infoFoodImage.sprite = foodSprites[index];
+                infoFoodImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                infoFoodImage.gameObject.SetActive(false); // Hide if art asset isn't ready
+            }
+        }
+
+        // Set description text string matching selection name
+        if (infoDescriptionText != null)
+        {
+            infoDescriptionText.text = "A delicious premium item served fresh at Pawfee Corner.";
+        }
+
+        // Render Level Progress and Coin stats rules line by line
+        if (infoStatsText != null)
+        {
+            int currentLevel = LevelSystem.Instance != null ? LevelSystem.Instance.currentLevel : 1;
+            bool meetsLevel = currentLevel >= recipeUnlockLevels[index];
+            bool alreadyOwned = isRecipePurchased[index];
+
+            string statsOutput = "🐾 Prep time: " + recipePrepTimes[index] + "s\n" +
+                                  "🐾 Reward: +" + recipeCoinRewards[index] + " Coins\n";
+
+            if (alreadyOwned)
+            {
+                statsOutput += "<color=green>✨ Status: Unlocked & Active!</color>";
+                if (infoLearnButton != null) infoLearnButton.SetActive(false);
+            }
+            else
+            {
+                string validationMark = meetsLevel ? "<color=green>✓ Ready to learn</color>" : "<color=red>❌ Locked: Requires Level " + recipeUnlockLevels[index] + "</color>";
+                statsOutput += validationMark + "\nCost: " + recipePurchaseCosts[index] + " Coins";
+                
+                // Show click button to buy only if level tier requirements are met
+                if (infoLearnButton != null) infoLearnButton.SetActive(meetsLevel);
+            }
+
+            infoStatsText.text = statsOutput;
+        }
+    }
+
+
+
+
+
 }
