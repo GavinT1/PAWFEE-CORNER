@@ -48,14 +48,20 @@ public class LevelSystem : MonoBehaviour
     }
     void Start()
     {
-        UpdateLevelUI();
+        CheckLevelUp();
     }
 
     // --- CALLED BY GAME MANAGER AFTER XP ADDED------------------------------------
     public void CheckLevelUp()
     {
         if (currentLevel >= maxLevel) return;
-        int currentXP = GameManager.Instance.xp;
+        
+        int currentXP = 0;
+        if (GameManager.Instance != null)
+        {
+            currentXP = GameManager.Instance.xp;
+        }
+
         while (currentLevel < maxLevel && currentXP >= xpThresholds[currentLevel])
         {
             currentLevel++;
@@ -110,12 +116,18 @@ public class LevelSystem : MonoBehaviour
     {
         if(currentLevel >= maxLevel) return 1f;
 
-        int currentXP = GameManager.Instance.xp;
+        int currentXP = 0;
+        if (GameManager.Instance != null)
+        {
+            currentXP = GameManager.Instance.xp;
+        }
+
         int levelStartXP = xpThresholds[currentLevel -1];
         int levelXPNeeded = xpToNextLevel[currentLevel -1];
         int xpIntoLevel = currentXP - levelStartXP;
 
-        return Mathf.Clamp01((float)xpIntoLevel / levelXPNeeded);
+        // Return raw progress matching our slider scale configuration perfectly
+        return Mathf.Clamp(xpIntoLevel, 0, levelXPNeeded);
     }
 
     //---UI----------------------------------------------------------
@@ -124,8 +136,18 @@ public class LevelSystem : MonoBehaviour
         if (levelText != null) levelText.text = "level " + currentLevel;
         if(xpSlider != null)
         {
+            if (currentLevel >= maxLevel)
+            {
+                xpSlider.minValue = 0f;
+                xpSlider.maxValue = 1f;
+                xpSlider.value = 1f;
+                return;
+            }
+
+            int levelXPNeeded = xpToNextLevel[currentLevel - 1];
+
             xpSlider.minValue = 0f;
-            xpSlider.maxValue = 1f;
+            xpSlider.maxValue = levelXPNeeded;
             xpSlider.value = GetXPBarProgress();
         }
     }

@@ -56,7 +56,6 @@ public class InteractiveCustomer : MonoBehaviour
         }
     }
 
-    // ── MOVEMENT ───────────────────────────────────
     public void MoveToQueueSpot(Transform spot)
     {
         targetDestination   = spot;
@@ -83,7 +82,6 @@ public class InteractiveCustomer : MonoBehaviour
         );
     }
 
-    // ── ORDER SEQUENCE ─────────────────────────────
     IEnumerator SettleAndShowBubble()
     {
         yield return new WaitForSeconds(1.0f);
@@ -107,7 +105,6 @@ public class InteractiveCustomer : MonoBehaviour
         float dynamicEatTime = tableComponent.GetCurrentEatTime();
         yield return new WaitForSeconds(dynamicEatTime);
 
-        // Spawn coin
         Vector3 coinPos = new Vector3(
             transform.position.x - 0.5f,
             transform.position.y,
@@ -117,13 +114,14 @@ public class InteractiveCustomer : MonoBehaviour
 
         Coin coinScript = freshCoin.GetComponent<Coin>();
         if (coinScript != null)
+        {
             coinScript.coinValue = tableComponent.GetCurrentCoinReward();
+            coinScript.TriggerPhysicalPopAnimation();
+        }
 
-        // Notify Animal Stars of successful service
         if (AnimalStarsManager.Instance != null)
             AnimalStarsManager.Instance.RecordSuccessfulService();
 
-        // XP reward
         if (GameManager.Instance != null)
             GameManager.Instance.AddXP(tableComponent.GetCurrentXpReward());
 
@@ -131,7 +129,6 @@ public class InteractiveCustomer : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        // Start roaming phase
         totalRoamingStops       = Random.Range(1, 4);
         currentRoamingStopCount = 0;
         isRoaming               = true;
@@ -139,7 +136,6 @@ public class InteractiveCustomer : MonoBehaviour
         isWalking               = true;
     }
 
-    // ── ROAMING ────────────────────────────────────
     IEnumerator PauseAndEvaluateNextMove()
     {
         yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));

@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 14875c4402d5e418ba5e5393caae98c7
+guid: 12e7598a0658e47afba41ba05a6cd077
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9119537536549414399
-    second: MeowDesign-_0
+      213: 7889918710807809115
+    second: CHEF BEAR_0
+  - first:
+      213: 6406229473411031277
+    second: CHEF BEAR_1
+  - first:
+      213: 7115987873011145602
+    second: CHEF BEAR_2
+  - first:
+      213: 552336816125344039
+    second: CHEF BEAR_3
+  - first:
+      213: 3736734610238763753
+    second: CHEF BEAR_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MeowDesign-_0
+      name: CHEF BEAR_0
       rect:
         serializedVersion: 2
-        x: 440
-        y: 140
-        width: 1041
-        height: 713
+        x: 747
+        y: 259
+        width: 1018
+        height: 1278
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +140,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ff56ed5721b1f8e70800000000000000
-      internalID: 9119537536549414399
+      spriteID: b5c4860d34f9e7d60800000000000000
+      internalID: 7889918710807809115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CHEF BEAR_1
+      rect:
+        serializedVersion: 2
+        x: 1729
+        y: 1440
+        width: 42
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de06d40b3cf77e850800000000000000
+      internalID: 6406229473411031277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CHEF BEAR_2
+      rect:
+        serializedVersion: 2
+        x: 1749
+        y: 1438
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b11d4b44111c260800000000000000
+      internalID: 7115987873011145602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CHEF BEAR_3
+      rect:
+        serializedVersion: 2
+        x: 1759
+        y: 1423
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7297589686b4aa700800000000000000
+      internalID: 552336816125344039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CHEF BEAR_4
+      rect:
+        serializedVersion: 2
+        x: 1765
+        y: 1423
+        width: 31
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e27037745c8bd330800000000000000
+      internalID: 3736734610238763753
       vertices: []
       indices: 
       edges: []
@@ -147,8 +247,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      MeowDesign-_0: 9119537536549414399
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

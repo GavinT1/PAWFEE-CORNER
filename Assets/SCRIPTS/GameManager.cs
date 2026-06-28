@@ -108,6 +108,11 @@ public class GameManager : MonoBehaviour
     {
         xp += amount;
         UpdateUI();
+
+        if (LevelSystem.Instance != null)
+        {
+            LevelSystem.Instance.CheckLevelUp();
+        }
     }   
 
 //---- REWARDS ------------------------------------------------------------------------
@@ -117,6 +122,11 @@ public class GameManager : MonoBehaviour
         coins += coinAmount;
         xp += xpAmount;
         UpdateUI();
+
+        if (LevelSystem.Instance != null)
+        {
+            LevelSystem.Instance.CheckLevelUp();
+        }
     }
 
     public void AddBoosterCharge()
@@ -182,9 +192,9 @@ public class GameManager : MonoBehaviour
         if (LevelSystem.Instance != null)
         {
             LevelSystem.Instance.currentLevel = data.currentLevel;
-            LevelSystem.Instance.RefreshUI();
+            LevelSystem.Instance.CheckLevelUp();
         }
         UpdateUI();
         Debug.Log("Loaded — Coins: " + coins + " Gems: " + gems + " XP: " + xp + " Level " + data.currentLevel);     
     }
-}    
+}

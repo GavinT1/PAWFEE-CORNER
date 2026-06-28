@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class MainMenuButtonScripts : MonoBehaviour
 {
-    public string gameplaySceneName = "GAMEPLAY"; 
+    public string gameplaySceneName = "LOADING SCENE"; 
     public GameObject settingsPanel;
+    public GemStoreManager gemStoreManager;
+    public CoinStoreManager coinStoreManager;
 
     private void Start()
     {
-        if (settingsPanel !=null)
+        if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
         }
@@ -16,29 +19,58 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         Debug.Log("PLAY button clicked! Loading scene: " + gameplaySceneName);
-        SceneManager.LoadScene(gameplaySceneName);
+        LoadingScreenManager.LoadScene(gameplaySceneName);
     }
 
     public void OnStoreButtonClicked()
     {
         Debug.Log("STORE button clicked!");
+        if (gemStoreManager != null)
+        {
+            gemStoreManager.OpenGemStore();
+        }
+    }
+
+    public void OnCoinStoreButtonClicked()
+    {
+        Debug.Log("COIN STORE button clicked!");
+        if (coinStoreManager != null)
+        {
+            coinStoreManager.OpenCoinStore();
+        }
     }
 
     public void OnSettingsButtonClicked()
     {
         Debug.Log("SETTINGS button clicked!");
-        if (settingsPanel !=null)
+        if (settingsPanel != null)
         {
-            settingsPanel.SetActive(true);
+            SmoothPanelAnimator animator = settingsPanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                settingsPanel.SetActive(true);
+            }
         }
     }
 
     public void OnCloseSettingsButtonClicked()
     {
         Debug.Log("Closed Settings Button");
-        if(settingsPanel !=null)
+        if (settingsPanel != null)
         {
-            settingsPanel.SetActive(false);
+            SmoothPanelAnimator animator = settingsPanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                settingsPanel.SetActive(false);
+            }
         }
     }
 
