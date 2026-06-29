@@ -106,6 +106,12 @@ public class CustomerSpawner : MonoBehaviour
         if (customerScript != null)
         {
             LineManager.Instance.JoinLine(customerScript);
+
+            // Trigger a flying danmaku comment when a customer joins the line!
+            if (DanmakuManager.Instance != null)
+            {
+                DanmakuManager.Instance.SpawnCustomerComment();
+            }
         }
         else
         {
