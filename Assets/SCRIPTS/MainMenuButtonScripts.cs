@@ -30,7 +30,15 @@ public class MainMenuButtonScripts : MonoBehaviour
         Debug.Log("STORE button clicked!");
         if (shopPanel != null)
         {
-            shopPanel.SetActive(true);
+            SmoothPanelAnimator animator = shopPanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                shopPanel.SetActive(true);
+            }
         }
     }
 
@@ -39,7 +47,15 @@ public class MainMenuButtonScripts : MonoBehaviour
         Debug.Log("Closed Store Button");
         if (shopPanel != null)
         {
-            shopPanel.SetActive(false);
+            SmoothPanelAnimator animator = shopPanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                shopPanel.SetActive(false);
+            }
         }
     }
 

@@ -382,7 +382,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 24350041}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362827}
+        m_TargetAssemblyTypeName: GemStoreManager, Assembly-CSharp
+        m_MethodName: BuyBestValueBundle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &52910800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,7 +2196,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 594778250}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362827}
+        m_TargetAssemblyTypeName: GemStoreManager, Assembly-CSharp
+        m_MethodName: BuyMegaBundle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &602617331
 GameObject:
   m_ObjectHideFlags: 0
@@ -3006,7 +3030,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1085476947}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362827}
+        m_TargetAssemblyTypeName: GemStoreManager, Assembly-CSharp
+        m_MethodName: BuyStarterBundle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1152867846
 GameObject:
   m_ObjectHideFlags: 0
@@ -3723,7 +3759,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1258928593}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362827}
+        m_TargetAssemblyTypeName: GemStoreManager, Assembly-CSharp
+        m_MethodName: BuyPopularBundle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1269162477
 GameObject:
   m_ObjectHideFlags: 0
@@ -4186,7 +4234,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1452121982}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362828}
+        m_TargetAssemblyTypeName: CoinStoreManager, Assembly-CSharp
+        m_MethodName: BuyCoinPouch
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1474253208
 GameObject:
   m_ObjectHideFlags: 0
@@ -4498,6 +4558,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1623362825}
   - component: {fileID: 1623362826}
+  - component: {fileID: 1623362827}
+  - component: {fileID: 1623362828}
   m_Layer: 0
   m_Name: GEM/COIN HOLDER MANAGER
   m_TagString: Untagged
@@ -4534,6 +4596,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gemText: {fileID: 1816326943}
   coinText: {fileID: 1152867848}
+--- !u!114 &1623362827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623362824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b7e8a7a842e4b7888eb9d3be0b4531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gemStorePanel: {fileID: 0}
+  successPanel: {fileID: 0}
+--- !u!114 &1623362828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623362824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 214eca7cb7f774d408366182864d1988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinStorePanel: {fileID: 0}
+  successPanel: {fileID: 0}
 --- !u!1 &1715095212
 GameObject:
   m_ObjectHideFlags: 0
@@ -4879,7 +4969,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1770384670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362828}
+        m_TargetAssemblyTypeName: CoinStoreManager, Assembly-CSharp
+        m_MethodName: BuyPiggyBank
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1776736121
 GameObject:
   m_ObjectHideFlags: 0
@@ -5972,7 +6074,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2084499968}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1623362828}
+        m_TargetAssemblyTypeName: CoinStoreManager, Assembly-CSharp
+        m_MethodName: BuyCoinVault
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2119866183
 GameObject:
   m_ObjectHideFlags: 0
