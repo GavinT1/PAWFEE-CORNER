@@ -9,34 +9,19 @@ public class GemStoreManager : MonoBehaviour
 
     void Start()
     {
-        if (gemStorePanel != null)
-        {
-            gemStorePanel.SetActive(false);
-        }
-        if (successPanel != null)
-        {
-            successPanel.SetActive(false);
-        }
+        if (gemStorePanel != null) gemStorePanel.SetActive(false);
+        if (successPanel != null) successPanel.SetActive(false);
     }
 
-// -- OPEN/CLOSE ------------------------------------------------------------------------
     public void OpenGemStore()
     {
-        if (gemStorePanel != null)
-        {
-            gemStorePanel.SetActive(true);
-        }
+        if (gemStorePanel != null) gemStorePanel.SetActive(true);
     }
 
     public void CloseGemStore()
     {
-        if (gemStorePanel != null)
-        {
-            gemStorePanel.SetActive(false);
-        }
+        if (gemStorePanel != null) gemStorePanel.SetActive(false);
     }
-
-//-- BUNDLE PURCHASES ------------------------------------------------------------------------
 
     public void BuyStarterBundle()
     {
@@ -58,10 +43,14 @@ public class GemStoreManager : MonoBehaviour
         ProcessFakePurchase(800);
     }
 
-//--- CORE LOGIC ------------------------------------------------------------------------
     private void ProcessFakePurchase(int gemAmount)
     {
         GameManager.Instance.AddGems(gemAmount);
+
+        if (SaveSystem.Instance != null)
+        {
+            SaveSystem.Instance.Save();
+        }
 
         if (successPanel != null)
         {

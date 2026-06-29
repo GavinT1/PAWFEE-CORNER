@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-
 public class CoinStoreManager : MonoBehaviour
 {
     [Header("Panels")]
@@ -10,34 +9,20 @@ public class CoinStoreManager : MonoBehaviour
 
     void Start()
     {
-        if (coinStorePanel != null)
-        {
-            coinStorePanel.SetActive(false);
-        }
-        if (successPanel != null)
-        {
-            successPanel.SetActive(false);
-        }
+        if (coinStorePanel != null) coinStorePanel.SetActive(false);
+        if (successPanel != null) successPanel.SetActive(false);
     }
 
-// -- OPEN/CLOSE ------------------------------------------------------------------------
     public void OpenCoinStore()
     {
-        if (coinStorePanel != null)
-        {
-            coinStorePanel.SetActive(true);
-        }
+        if (coinStorePanel != null) coinStorePanel.SetActive(true);
     }
 
     public void CloseCoinStore()
     {
-        if (coinStorePanel != null)
-        {
-            coinStorePanel.SetActive(false);
-        }
+        if (coinStorePanel != null) coinStorePanel.SetActive(false);
     }
 
-//-- COIN BUNDLE PURCHASES ------------------------------------------------------------------------
     public void BuyCoinPouch()
     {
         ProcessCoinPurchase(20, 500);
@@ -53,12 +38,16 @@ public class CoinStoreManager : MonoBehaviour
         ProcessCoinPurchase(200, 6000);
     }
 
-//-- CORE LOGIC ------------------------------------------------------------------------
     private void ProcessCoinPurchase(int gemCost, int coinReward)
     {
         if (GameManager.Instance.SpendGems(gemCost))
         {
             GameManager.Instance.AddCoins(coinReward);
+
+            if (SaveSystem.Instance != null)
+            {
+                SaveSystem.Instance.Save();
+            }
 
             if (successPanel != null)
             {

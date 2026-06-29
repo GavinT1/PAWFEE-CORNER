@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            LoadGame(); 
         }
         else
         {
@@ -39,7 +40,6 @@ public class GameManager : MonoBehaviour
     private void Start() 
     { 
         UpdateUI();
-        LoadGame(); 
     }
 
     private void Update()
@@ -150,11 +150,17 @@ public class GameManager : MonoBehaviour
     }
 
 // --- UI ------------------------------------------------------------------------
-    void UpdateUI()
+    public void UpdateUI()
     {
         if (coinText != null) coinText.text = "Coins: " + coins;
         if (gemText != null) gemText.text = "Gems: " + gems;
         if (xpText !=  null) xpText.text = "XP: " + xp;
+
+        CurrencyUIDisplay globalUI = FindAnyObjectByType<CurrencyUIDisplay>();
+        if (globalUI != null)
+        {
+            globalUI.RefreshUI();
+        }
     }
 
 
@@ -187,6 +193,7 @@ public class GameManager : MonoBehaviour
         coins = data.coins;
         gems = data.gems;
         xp = data.xp;
+        boosterCharges = data.boosterCharges;
         
         // load level data and update level UI
         if (LevelSystem.Instance != null)

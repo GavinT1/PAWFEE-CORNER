@@ -5,14 +5,17 @@ public class MainMenuButtonScripts : MonoBehaviour
 {
     public string gameplaySceneName = "LOADING SCENE"; 
     public GameObject settingsPanel;
-    public GemStoreManager gemStoreManager;
-    public CoinStoreManager coinStoreManager;
+    public GameObject shopPanel;
 
     private void Start()
     {
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
+        }
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(false);
         }
     }
 
@@ -25,18 +28,18 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnStoreButtonClicked()
     {
         Debug.Log("STORE button clicked!");
-        if (gemStoreManager != null)
+        if (shopPanel != null)
         {
-            gemStoreManager.OpenGemStore();
+            shopPanel.SetActive(true);
         }
     }
 
-    public void OnCoinStoreButtonClicked()
+    public void OnCloseStoreButtonClicked()
     {
-        Debug.Log("COIN STORE button clicked!");
-        if (coinStoreManager != null)
+        Debug.Log("Closed Store Button");
+        if (shopPanel != null)
         {
-            coinStoreManager.OpenCoinStore();
+            shopPanel.SetActive(false);
         }
     }
 
