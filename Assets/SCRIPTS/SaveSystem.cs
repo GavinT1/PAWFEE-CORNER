@@ -106,9 +106,9 @@ public class SaveSystem : MonoBehaviour
         data.lastSessionTime = System.DateTime.Now.ToString();
 
         // Settings
-        data.musicOn = SettingsManager.Instance != null
+        data.musicOn = (SettingsManager.Instance != null && SettingsManager.Instance.musicToggle != null)
             ? SettingsManager.Instance.musicToggle.isOn: true;
-        data.sfxOn   = SettingsManager.Instance != null
+        data.sfxOn   = (SettingsManager.Instance != null && SettingsManager.Instance.sfxToggle != null)
             ? SettingsManager.Instance.sfxToggle.isOn: true;
 
         // saving recipes

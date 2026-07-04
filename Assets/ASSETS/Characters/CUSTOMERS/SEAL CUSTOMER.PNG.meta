@@ -1,22 +1,31 @@
 fileFormatVersion: 2
-guid: 12e7598a0658e47afba41ba05a6cd077
+guid: 737ef379344d8ab4597554675153a872
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7889918710807809115
-    second: CHEF BEAR_0
+      213: -430150539395338331
+    second: SEAL CUSTOMER_0
   - first:
-      213: 6406229473411031277
-    second: CHEF BEAR_1
+      213: 695659767939667669
+    second: SEAL CUSTOMER_1
   - first:
-      213: 7115987873011145602
-    second: CHEF BEAR_2
+      213: 3210576898031668986
+    second: SEAL CUSTOMER_2
   - first:
-      213: 552336816125344039
-    second: CHEF BEAR_3
+      213: -5112004771111463260
+    second: SEAL CUSTOMER_3
   - first:
-      213: 3736734610238763753
-    second: CHEF BEAR_4
+      213: -3590709818411901095
+    second: SEAL CUSTOMER_4
+  - first:
+      213: -8283430385892305748
+    second: SEAL CUSTOMER_5
+  - first:
+      213: -1796039833802263816
+    second: SEAL CUSTOMER_6
+  - first:
+      213: 1474272232671696193
+    second: SEAL CUSTOMER_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,30 +117,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CHEF BEAR_0
+      name: SEAL CUSTOMER_0
       rect:
         serializedVersion: 2
-        x: 747
-        y: 259
-        width: 1018
-        height: 1278
+        x: 714
+        y: 133
+        width: 719
+        height: 1385
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +136,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b5c4860d34f9e7d60800000000000000
-      internalID: 7889918710807809115
+      spriteID: 5afe56b0d5cc70af0800000000000000
+      internalID: -430150539395338331
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_1
+      name: SEAL CUSTOMER_1
       rect:
         serializedVersion: 2
-        x: 1729
-        y: 1440
-        width: 42
-        height: 27
+        x: 1456
+        y: 1058
+        width: 19
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: de06d40b3cf77e850800000000000000
-      internalID: 6406229473411031277
+      spriteID: 5d613988fda77a900800000000000000
+      internalID: 695659767939667669
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_2
+      name: SEAL CUSTOMER_2
       rect:
         serializedVersion: 2
-        x: 1749
-        y: 1438
-        width: 15
-        height: 9
+        x: 1502
+        y: 957
+        width: 19
+        height: 41
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +180,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 28b11d4b44111c260800000000000000
-      internalID: 7115987873011145602
+      spriteID: afec04bada24e8c20800000000000000
+      internalID: 3210576898031668986
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_3
+      name: SEAL CUSTOMER_3
       rect:
         serializedVersion: 2
-        x: 1759
-        y: 1423
-        width: 7
-        height: 7
+        x: 1646
+        y: 855
+        width: 37
+        height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +202,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7297589686b4aa700800000000000000
-      internalID: 552336816125344039
+      spriteID: 4a69cc7ceb28e09b0800000000000000
+      internalID: -5112004771111463260
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_4
+      name: SEAL CUSTOMER_4
       rect:
         serializedVersion: 2
-        x: 1765
-        y: 1423
-        width: 31
-        height: 39
+        x: 1845
+        y: 846
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +224,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9e27037745c8bd330800000000000000
-      internalID: 3736734610238763753
+      spriteID: 95f1d0ec17c3b2ec0800000000000000
+      internalID: -3590709818411901095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SEAL CUSTOMER_5
+      rect:
+        serializedVersion: 2
+        x: 1016
+        y: 106
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca4563793f75b0d80800000000000000
+      internalID: -8283430385892305748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SEAL CUSTOMER_6
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 110
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f2b3c7794f2317e0800000000000000
+      internalID: -1796039833802263816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SEAL CUSTOMER_7
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 103
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1455e9ad8caa57410800000000000000
+      internalID: 1474272232671696193
       vertices: []
       indices: 
       edges: []
@@ -247,12 +309,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      CHEF BEAR_0: 7889918710807809115
-      CHEF BEAR_1: 6406229473411031277
-      CHEF BEAR_2: 7115987873011145602
-      CHEF BEAR_3: 552336816125344039
-      CHEF BEAR_4: 3736734610238763753
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

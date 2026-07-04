@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: 12e7598a0658e47afba41ba05a6cd077
+guid: 0eb39a42d290cba459f6ff354a773eb5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7889918710807809115
-    second: CHEF BEAR_0
+      213: 6349602233977754367
+    second: RatingsBlank_0
   - first:
-      213: 6406229473411031277
-    second: CHEF BEAR_1
+      213: -1836153315293366054
+    second: RatingsBlank_1
   - first:
-      213: 7115987873011145602
-    second: CHEF BEAR_2
+      213: -7242682500897961376
+    second: RatingsBlank_2
   - first:
-      213: 552336816125344039
-    second: CHEF BEAR_3
+      213: -7846617237056898389
+    second: RatingsBlank_3
   - first:
-      213: 3736734610238763753
-    second: CHEF BEAR_4
+      213: 951487792060827280
+    second: RatingsBlank_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,30 +108,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CHEF BEAR_0
+      name: RatingsBlank_0
       rect:
         serializedVersion: 2
-        x: 747
-        y: 259
-        width: 1018
-        height: 1278
+        x: 99
+        y: 392
+        width: 323
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +127,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b5c4860d34f9e7d60800000000000000
-      internalID: 7889918710807809115
+      spriteID: ff2554517915e1850800000000000000
+      internalID: 6349602233977754367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_1
+      name: RatingsBlank_1
       rect:
         serializedVersion: 2
-        x: 1729
-        y: 1440
-        width: 42
-        height: 27
+        x: 436
+        y: 392
+        width: 323
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +149,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: de06d40b3cf77e850800000000000000
-      internalID: 6406229473411031277
+      spriteID: ad878c0c94ca486e0800000000000000
+      internalID: -1836153315293366054
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_2
+      name: RatingsBlank_2
       rect:
         serializedVersion: 2
-        x: 1749
-        y: 1438
-        width: 15
-        height: 9
+        x: 778
+        y: 392
+        width: 323
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 28b11d4b44111c260800000000000000
-      internalID: 7115987873011145602
+      spriteID: 06a0a0983a2dc7b90800000000000000
+      internalID: -7242682500897961376
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_3
+      name: RatingsBlank_3
       rect:
         serializedVersion: 2
-        x: 1759
-        y: 1423
-        width: 7
-        height: 7
+        x: 1118
+        y: 392
+        width: 323
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +193,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7297589686b4aa700800000000000000
-      internalID: 552336816125344039
+      spriteID: baa34c032373b1390800000000000000
+      internalID: -7846617237056898389
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CHEF BEAR_4
+      name: RatingsBlank_4
       rect:
         serializedVersion: 2
-        x: 1765
-        y: 1423
-        width: 31
-        height: 39
+        x: 1457
+        y: 392
+        width: 323
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9e27037745c8bd330800000000000000
-      internalID: 3736734610238763753
+      spriteID: 09608ed0b1d543d00800000000000000
+      internalID: 951487792060827280
       vertices: []
       indices: 
       edges: []
@@ -247,12 +234,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      CHEF BEAR_0: 7889918710807809115
-      CHEF BEAR_1: 6406229473411031277
-      CHEF BEAR_2: 7115987873011145602
-      CHEF BEAR_3: 552336816125344039
-      CHEF BEAR_4: 3736734610238763753
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

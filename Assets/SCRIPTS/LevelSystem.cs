@@ -107,8 +107,17 @@ public class LevelSystem : MonoBehaviour
             Debug.Log("Penguin Waiter unlocked!");
             break;
         }
-
-        if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+        
+        // safety wrapper to prevent first frame crash if SaveSystem is not initialized yet
+        if (SaveSystem.Instance != null)
+        {
+            SaveSystem.Instance.Save();
+        }
+        else
+        {
+            Debug.LogWarning("SaveSystem instance not found. Save skipped.");
+        }
+        
     }
 
     //--- XP PROGRESS--------------------------------------------------
