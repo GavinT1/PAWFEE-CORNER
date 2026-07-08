@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Special Pawfee_0
+      name: Special Pawfee_1
       rect:
         serializedVersion: 2
-        x: 543
-        y: 607
-        width: 1081
-        height: 989
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e12994ef48ecd32c0800000000000000
-      internalID: -4450173786174942690
+      spriteID: 4f69b0b05d7c91e45af8f0fd7d0b3bb5
+      internalID: -1176174545
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5552d54649dac0148ae4883170297ba1
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Special Pawfee_1: -1491633295
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
