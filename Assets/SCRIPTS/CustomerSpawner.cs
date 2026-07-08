@@ -1,12 +1,18 @@
 using UnityEngine;
 
-
 public class CustomerSpawner : MonoBehaviour
 {
     [Header("References")]
     public GameObject customerPrefab;
     public CafeTable[] tables; 
     public Transform spawnPoint; 
+    
+    [Header("Room Management Integration")]
+    public Transform mainAreaGroup; 
+
+    [Header("Thief Event Settings")]
+    public GameObject thiefPrefab;
+    [Range(0f, 100f)] public float thiefSpawnChance = 15f;
 
     [Header("Auto Trickle Settings")]
     public float autoSpawnInterval = 8f;
@@ -26,7 +32,6 @@ public class CustomerSpawner : MonoBehaviour
         CheckForOpenTables();
     }
 
-// -- AUTO TRICKLE SPAWN ------------------------------------------------------------------------
     void HandleAutoSpawn()
     {
         float speedMultiplier = 1.0f;
@@ -41,11 +46,20 @@ public class CustomerSpawner : MonoBehaviour
         if (autoSpawnTimer >= autoSpawnInterval)
         {
             autoSpawnTimer = 0f;
-            SpawnCustomerIntoLine();
+
+            float randomRoll = Random.Range(0f, 100f);
+
+            if (randomRoll <= thiefSpawnChance && thiefPrefab != null)
+            {
+                Instantiate(thiefPrefab, spawnPoint.position, Quaternion.identity, mainAreaGroup);
+            }
+            else
+            {
+                SpawnCustomerIntoLine();
+            }
         }
     }
 
-// -- PROMO BUTTON COOLDOWN ------------------------------------------------------------------------
     public void OnPromoButtonClicked()
     {
         if (promoOnCooldown)
@@ -60,13 +74,11 @@ public class CustomerSpawner : MonoBehaviour
         {
             currentPromoClicks = 0;
 
-            // Spawn Bursts 3 customers
             for (int i = 0; i < 3; i++)
             {
                 SpawnCustomerIntoLine();
             }
 
-            // Start cooldown
             promoOnCooldown = true;
             promoCooldownTimer = promoCooldownDuration;
         }
@@ -86,7 +98,6 @@ public class CustomerSpawner : MonoBehaviour
         }
     }
 
-// -- SPAWN LOGIC ------------------------------------------------------------------------
     void SpawnCustomerIntoLine()
     {
         if (spawnPoint == null)
@@ -100,14 +111,13 @@ public class CustomerSpawner : MonoBehaviour
             return;
         }
         
-        GameObject newCustomer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        GameObject newCustomer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity, mainAreaGroup);
         InteractiveCustomer customerScript = newCustomer.GetComponent<InteractiveCustomer>();
         
         if (customerScript != null)
         {
             LineManager.Instance.JoinLine(customerScript);
 
-            // Trigger a flying danmaku comment when a customer joins the line!
             if (DanmakuManager.Instance != null)
             {
                 DanmakuManager.Instance.SpawnCustomerComment();
@@ -119,14 +129,12 @@ public class CustomerSpawner : MonoBehaviour
         }
     }
 
-// -- TABLE ASSIGNMENT LOGIC ------------------------------------------------------------------------
     void CheckForOpenTables()
     {
         if (!LineManager.Instance.HasCustomers()) return;
 
         foreach (CafeTable table in tables)
         {
-            
             if (table.isUnlocked && !table.isOccupied)
             {
                 table.isOccupied = true; 
