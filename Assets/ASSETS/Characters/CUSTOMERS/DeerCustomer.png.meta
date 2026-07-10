@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -103,12 +103,12 @@ TextureImporter:
       name: DeerCustomer_0
       rect:
         serializedVersion: 2
-        x: 50
-        y: 150
-        width: 427
-        height: 495
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2
+        y: 0
+        width: 610
+        height: 792
+      alignment: 9
+      pivot: {x: 0.4937952, y: 0.19892469}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 34770468952f4be459c1b365b200ab2d
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DeerCustomer_0: 3871946805125064619
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

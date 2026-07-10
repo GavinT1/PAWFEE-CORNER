@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 3803787207775825918}
   - component: {fileID: 4354138139971705125}
   - component: {fileID: 7353941906076420674}
+  - component: {fileID: 4500306345394454129}
   m_Layer: 6
   m_Name: Person
   m_TagString: Untagged
@@ -311,6 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870a6b7041e784d89aa6def7aee79f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterSpriteRenderer: {fileID: 0}
+  customerSkins: []
   orderBubble: {fileID: 365330056159567489}
   coinPrefab: {fileID: 3315643930701793309, guid: e1941aa899e3741cd9e7bdc51bec2492, type: 3}
 --- !u!50 &7353941906076420674
@@ -340,3 +343,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4500306345394454129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7509812320068827111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870a6b7041e784d89aa6def7aee79f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterSpriteRenderer: {fileID: 3803787207775825918}
+  customerSkins:
+  - {fileID: -3532021549569416541, guid: 395c9cc0dcef96a4db2d65f15f8b93bf, type: 3}
+  - {fileID: 3871946805125064619, guid: b31b905b973faba41bee217d0438e5d9, type: 3}
+  - {fileID: -630466965853966586, guid: bb3e5de5dc71eb546809ee90270c8df6, type: 3}
+  - {fileID: -5508662354982861438, guid: 6d253ce155fef1f43a572d17c242ac23, type: 3}
+  - {fileID: -430150539395338331, guid: 737ef379344d8ab4597554675153a872, type: 3}
+  orderBubble: {fileID: 0}
+  coinPrefab: {fileID: 0}

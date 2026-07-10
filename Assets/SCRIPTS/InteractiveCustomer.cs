@@ -3,6 +3,9 @@ using System.Collections;
 
 public class InteractiveCustomer : MonoBehaviour
 {
+    [Header("Visual Character Settings")]
+    public SpriteRenderer characterSpriteRenderer; // Drag this object's own SpriteRenderer here
+    public Sprite[] customerSkins; // Assign different customer skin sprites in the inspector
     public GameObject orderBubble;
     public GameObject coinPrefab;
 
@@ -24,6 +27,23 @@ public class InteractiveCustomer : MonoBehaviour
         spawnExitPoint = transform.position;
         if (orderBubble != null)
             orderBubble.SetActive(false);
+        
+        // ── MODULAR SKIN PICKER ENGINE ────────────────────────────────────────
+        // Automatically grabs the SpriteRenderer if it wasn't manually dragged in the inspector
+        if (characterSpriteRenderer == null)
+        {
+            characterSpriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        // Picks a random character skin asset from your array of 5 unique guests
+        if (customerSkins != null && customerSkins.Length > 0 && characterSpriteRenderer != null)
+        {
+            int randomSkinIndex = Random.Range(0, customerSkins.Length);
+            if (customerSkins[randomSkinIndex] != null)
+            {
+                characterSpriteRenderer.sprite = customerSkins[randomSkinIndex];
+            }
+        }
     }
 
     void Update()
