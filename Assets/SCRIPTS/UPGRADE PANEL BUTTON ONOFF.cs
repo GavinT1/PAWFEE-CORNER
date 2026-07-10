@@ -8,7 +8,15 @@ public class UPGRADEPANELBUTTONONOFF : MonoBehaviour
     {
         if (panel != null)
         {
-            panel.SetActive(true);
+            SmoothPanelAnimator animator = panel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                panel.SetActive(true);
+            }
         }
     }
 
@@ -16,7 +24,15 @@ public class UPGRADEPANELBUTTONONOFF : MonoBehaviour
     {
         if (panel != null)
         {
-            panel.SetActive(false);
+            SmoothPanelAnimator animator = panel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                panel.SetActive(false);
+            }
         }
     }
 }

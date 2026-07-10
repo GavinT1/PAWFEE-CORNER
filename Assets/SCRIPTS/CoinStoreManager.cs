@@ -15,12 +15,34 @@ public class CoinStoreManager : MonoBehaviour
 
     public void OpenCoinStore()
     {
-        if (coinStorePanel != null) coinStorePanel.SetActive(true);
+        if (coinStorePanel != null) 
+        {
+            SmoothPanelAnimator animator = coinStorePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                coinStorePanel.SetActive(true);
+            }
+        }
     }
 
     public void CloseCoinStore()
     {
-        if (coinStorePanel != null) coinStorePanel.SetActive(false);
+        if (coinStorePanel != null)
+        {
+            SmoothPanelAnimator animator = coinStorePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                coinStorePanel.SetActive(false);
+            }
+        }
     }
 
     public void BuyCoinPouch()

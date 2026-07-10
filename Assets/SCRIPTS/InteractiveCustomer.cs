@@ -162,4 +162,41 @@ public class InteractiveCustomer : MonoBehaviour
         float randomY = Random.Range(-2.0f, 1.5f);
         return new Vector3(randomX, randomY, transform.position.z);
     }
+
+    void OnEnable()
+    {
+        if (spawnExitPoint == Vector3.zero) return;
+
+        StopAllCoroutines();
+
+        if (isWalking) return;
+
+        if (isRoaming)
+        {
+            StartCoroutine(PauseAndEvaluateNextMove());
+        }
+        else if (isLeaving)
+        {
+            isWalking = true;
+        }
+        else if (!waitingInLine && tableComponent != null && !tableComponent.isOccupied)
+        {
+            totalRoamingStops = Random.Range(1, 4);
+            currentRoamingStopCount = 0;
+            isRoaming = true;
+            specificTargetPos = GetRandomFloorSpot();
+            isWalking = true;
+        }
+        else if (!waitingInLine && orderBubble != null && !orderBubble.activeSelf)
+        {
+            if (tableComponent != null && tableComponent.isOccupied)
+            {
+                StartCoroutine(CookingAndEatingSequence());
+            }
+        }
+        else if (!waitingInLine && orderBubble != null && orderBubble.activeSelf)
+        {
+            orderBubble.SetActive(true);
+        }
+    }
 }

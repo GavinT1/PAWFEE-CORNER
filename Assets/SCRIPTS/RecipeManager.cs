@@ -59,8 +59,17 @@ public class RecipeManager : MonoBehaviour
     public void OpenRecipePanel()
     {
         if (recipePanel != null)
-            recipePanel.SetActive(true);
-
+        {
+            SmoothPanelAnimator animator = recipePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                recipePanel.SetActive(true);
+            }
+        }
         RefreshRecipeUI();
         SelectRecipeCard(0); 
     }
@@ -68,7 +77,17 @@ public class RecipeManager : MonoBehaviour
     public void CloseRecipePanel()
     {
         if (recipePanel != null)
-            recipePanel.SetActive(false);
+        {
+            SmoothPanelAnimator animator = recipePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                recipePanel.SetActive(false);
+            }
+        }
     }
 
     public void RefreshRecipeUI()

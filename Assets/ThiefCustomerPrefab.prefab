@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinsToSteal: 500
   totalTapsNeeded: 5
-  moveSpeed: 150
+  walkSpeed: 3
 --- !u!58 &2964791906188057028
 CircleCollider2D:
   m_ObjectHideFlags: 0

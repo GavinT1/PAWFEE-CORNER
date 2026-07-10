@@ -12,6 +12,11 @@ public class ThiefCustomer : MonoBehaviour
     private bool hasStolen = false;
     private Vector3 specificTargetPos;
     private bool isWalking = false;
+    private bool isLeaving = false;
+    private Vector3 spawnExitPoint;
+
+    private int totalRoamingStops = 0;
+    private int currentRoamingStopCount = 0;
 
     void Start()
     {
@@ -24,7 +29,11 @@ public class ThiefCustomer : MonoBehaviour
             }
         }
 
+        spawnExitPoint = transform.position;
         StealMoney();
+
+        totalRoamingStops = Random.Range(2, 5);
+        currentRoamingStopCount = 0;
 
         specificTargetPos = GetRandomFloorSpot();
         isWalking = true;
@@ -43,7 +52,15 @@ public class ThiefCustomer : MonoBehaviour
             if (Vector3.Distance(transform.position, specificTargetPos) < 0.1f)
             {
                 isWalking = false;
-                StartCoroutine(PauseBeforeNextSpot());
+
+                if (isLeaving)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    StartCoroutine(PauseBeforeNextSpot());
+                }
             }
         }
     }
@@ -52,8 +69,19 @@ public class ThiefCustomer : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
         
-        specificTargetPos = GetRandomFloorSpot();
-        isWalking = true;
+        currentRoamingStopCount++;
+
+        if (currentRoamingStopCount < totalRoamingStops)
+        {
+            specificTargetPos = GetRandomFloorSpot();
+            isWalking = true;
+        }
+        else
+        {
+            isLeaving = true;
+            specificTargetPos = spawnExitPoint;
+            isWalking = true;
+        }
     }
 
     Vector3 GetRandomFloorSpot()
@@ -108,5 +136,23 @@ public class ThiefCustomer : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    void OnEnable()
+    {
+        if (spawnExitPoint == Vector3.zero) return;
+
+        StopAllCoroutines();
+
+        if (isWalking) return;
+
+        if (isLeaving)
+        {
+            isWalking = true;
+        }
+        else
+        {
+            StartCoroutine(PauseBeforeNextSpot());
+        }
     }
 }

@@ -15,12 +15,34 @@ public class GemStoreManager : MonoBehaviour
 
     public void OpenGemStore()
     {
-        if (gemStorePanel != null) gemStorePanel.SetActive(true);
+        if (gemStorePanel != null)
+        {
+            SmoothPanelAnimator animator = gemStorePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.ShowPanel();
+            }
+            else
+            {
+                gemStorePanel.SetActive(true);
+            }
+        }
     }
 
     public void CloseGemStore()
     {
-        if (gemStorePanel != null) gemStorePanel.SetActive(false);
+        if (gemStorePanel != null) 
+        {
+            SmoothPanelAnimator animator = gemStorePanel.GetComponent<SmoothPanelAnimator>();
+            if (animator != null)
+            {
+                animator.HidePanel();
+            }
+            else
+            {
+                gemStorePanel.SetActive(false);
+            }
+        }
     }
 
     public void BuyStarterBundle()
