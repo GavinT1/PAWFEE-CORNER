@@ -9,6 +9,9 @@ public class InteractiveCustomer : MonoBehaviour
     public GameObject orderBubble;
     public GameObject coinPrefab;
 
+    [Header("Bubble Position Tuning")]
+    private Vector3 bubbleLocalPosition = new Vector3(-1.5f, 1.25f, 0f); // Change X to move left/right, increase Y to move higher above head!
+
     private Transform targetDestination;
     private CafeTable tableComponent;
     private float walkSpeed = 1.5f;
@@ -26,8 +29,11 @@ public class InteractiveCustomer : MonoBehaviour
     {
         spawnExitPoint = transform.position;
         if (orderBubble != null)
+        {
             orderBubble.SetActive(false);
-        
+            orderBubble.transform.localPosition = bubbleLocalPosition;
+        }
+
         // ── MODULAR SKIN PICKER ENGINE ────────────────────────────────────────
         // Automatically grabs the SpriteRenderer if it wasn't manually dragged in the inspector
         if (characterSpriteRenderer == null)
@@ -97,7 +103,7 @@ public class InteractiveCustomer : MonoBehaviour
 
         specificTargetPos = new Vector3(
             tableTransform.position.x,
-            tableTransform.position.y + 1f,
+            tableTransform.position.y + 0.5f,
             tableTransform.position.z
         );
     }
@@ -139,7 +145,8 @@ public class InteractiveCustomer : MonoBehaviour
                 }
             }
 
-            // Turn on the physical bubble GameObject visual rendering layer
+            // Fix: Ensures the bubble updates its location right when it becomes visible
+            orderBubble.transform.localPosition = bubbleLocalPosition;
             orderBubble.SetActive(true);
         }
     }

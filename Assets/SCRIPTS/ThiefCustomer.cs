@@ -103,7 +103,7 @@ public class ThiefCustomer : MonoBehaviour
         SpriteRenderer spriteRen = GetComponent<SpriteRenderer>();
         if (spriteRen != null)
         {
-            spriteRen.color = new Color(0.8f, 0.3f, 0.3f, 1f);
+            spriteRen.color = Color.white;
         }
     }
 
@@ -111,9 +111,6 @@ public class ThiefCustomer : MonoBehaviour
     {
         currentTaps++;
         Debug.Log($"Thief Tapped! Count: {currentTaps}/{totalTapsNeeded}");
-
-        transform.localScale = Vector3.one * 1.15f;
-        Invoke("ResetScale", 0.05f);
 
         if (currentTaps >= totalTapsNeeded)
         {

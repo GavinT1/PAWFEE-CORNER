@@ -316,6 +316,8 @@ MonoBehaviour:
   customerSkins: []
   orderBubble: {fileID: 365330056159567489}
   coinPrefab: {fileID: 3315643930701793309, guid: e1941aa899e3741cd9e7bdc51bec2492, type: 3}
+  bubbleOffset: {x: 0.6, y: 0.8, z: 0}
+  tableStandingOffset: {x: 0, y: 0.6, z: 0}
 --- !u!50 &7353941906076420674
 Rigidbody2D:
   serializedVersion: 5
@@ -362,5 +364,7 @@ MonoBehaviour:
   - {fileID: -630466965853966586, guid: bb3e5de5dc71eb546809ee90270c8df6, type: 3}
   - {fileID: -5508662354982861438, guid: 6d253ce155fef1f43a572d17c242ac23, type: 3}
   - {fileID: -430150539395338331, guid: 737ef379344d8ab4597554675153a872, type: 3}
-  orderBubble: {fileID: 0}
-  coinPrefab: {fileID: 0}
+  orderBubble: {fileID: 365330056159567489}
+  coinPrefab: {fileID: 3315643930701793309, guid: e1941aa899e3741cd9e7bdc51bec2492, type: 3}
+  bubbleOffset: {x: 0.6, y: 0.8, z: 0}
+  tableStandingOffset: {x: 0, y: 0.6, z: 0}
