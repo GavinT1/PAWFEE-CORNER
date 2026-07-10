@@ -116,12 +116,12 @@ TextureImporter:
       name: Special Pawfee_0
       rect:
         serializedVersion: 2
-        x: 543
-        y: 607
-        width: 1081
-        height: 989
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 08c3c528f878ee14390803035140033d
     internalID: 0
     vertices: []
     indices: 
