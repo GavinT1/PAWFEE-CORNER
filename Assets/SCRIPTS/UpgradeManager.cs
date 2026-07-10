@@ -3,40 +3,67 @@ using TMPro;
 
 public class UpgradeManager : MonoBehaviour
 {
-    [Header("Tables Reference")]
+    [Header("Table Object References")]
     public CafeTable[] tables;
 
-    [Header("UI Button Text Display")]
-    public TMP_Text[] buttonTexts;
+    [Header("Buy Panel Text Display Area")]
+    public TMP_Text[] buyButtonTexts; 
 
-    // GDD costs per tier
+    [Header("Upgrade Panel Text Display Area")]
+    public TMP_Text[] upgradeButtonTexts; 
+
+    [Header("Description Text Display Area")]
+    public TMP_Text[] descriptionTexts; 
+
+    [Header("Buy Page Level Lock Overlays")]
+    public GameObject[] buyPageLockOverlays; 
+
+    [Header("Upgrade Page Level Lock Overlays")]
+    public GameObject[] upgradePageLockOverlays; 
+
+    [Header("Top Header Navigation UI Text References")]
+    public TMP_Text pageTitleText;
+
+    [Header("Main Content Panel Screen References")]
+    public GameObject buyPagePanel;   
+    public GameObject upgradePagePanel; 
+
+    private int currentPageIndex = 0; // 0 = Buy/Unlock Page, 1 = Upgrade Page
+
     private int[] tierCosts = new int[]
     {
-        150,     // Tier 1
-        1200,    // Tier 2
-        9000,    // Tier 3
-        70000,   // Tier 4
-        500000   // Tier 5
+        150,     
+        1200,    
+        9000,    
+        70000,   
+        500000   
     };
 
-    // Level required per tier — matches GDD
     private int[] tierLevelRequirements = new int[]
     {
-        1,  // Tier 1 — Level 1
-        3,  // Tier 2 — Level 3
-        5,  // Tier 3 — Level 5
-        7,  // Tier 4 — Level 7
-        9   // Tier 5 — Level 9
+        1,  
+        3,  
+        5,  
+        7,  
+        9   
     };
 
-    // Unlock costs per table slot
     private int[] unlockCosts = new int[]
     {
-        0,    // Table 1 — free from start
-        150,  // Table 2
-        300,  // Table 3
-        500,  // Table 4
-        800   // Table 5
+        0,    
+        150,  
+        300,  
+        500,  
+        800   
+    };
+
+    private int[] tableUnlockLevelRequirements = new int[]
+    {
+        1, 
+        3, 
+        5, 
+        7, 
+        9  
     };
 
     public static UpgradeManager Instance;
@@ -53,7 +80,6 @@ public class UpgradeManager : MonoBehaviour
         {
             GameData data = SaveSystem.Instance.Load();
             
-            // Check if a saved file array exists and matches our scene layout array size
             if (data != null && data.tableUnlockedStates != null && data.tableUnlockedStates.Length == tables.Length)
             {
                 for (int i = 0; i < tables.Length; i++)
@@ -63,7 +89,6 @@ public class UpgradeManager : MonoBehaviour
                         tables[i].isUnlocked = data.tableUnlockedStates[i];
                         tables[i].tableLevel = data.tableTiers[i];
                         
-                        // Physically toggle the table gameobject active/inactive in your scene space
                         tables[i].gameObject.SetActive(data.tableUnlockedStates[i]);
                     }
                 }
@@ -73,125 +98,178 @@ public class UpgradeManager : MonoBehaviour
         UpdateUpgradeUI();
     }
 
+    public void SwitchToBuyPage()
+    {
+        currentPageIndex = 0;
+        UpdateUpgradeUI();
+    }
+
+    public void SwitchToUpgradePage()
+    {
+        currentPageIndex = 1;
+        UpdateUpgradeUI();
+    }
+
     public void OnClickUpgradeRow(int index)
     {
         if (index < 0 || index >= tables.Length) return;
 
         CafeTable targetTable = tables[index];
-        int playerLevel = LevelSystem.Instance != null
-            ? LevelSystem.Instance.currentLevel
-            : 1;
+        int playerLevel = LevelSystem.Instance != null ? LevelSystem.Instance.currentLevel : 1;
 
-        // ── UNLOCK TABLE ───────────────────────────
-        if (!targetTable.isUnlocked)
+        if (currentPageIndex == 0)
         {
-            if (GameManager.Instance.SpendCoins(unlockCosts[index]))
+            if (!targetTable.isUnlocked)
             {
-                targetTable.isUnlocked = true;
-                targetTable.gameObject.SetActive(true);
+                int requiredLevel = tableUnlockLevelRequirements[index];
+                if (playerLevel < requiredLevel)
+                {
+                    Debug.LogWarning($"Cannot buy Table {index + 1}! Requires Level {requiredLevel}.");
+                    return;
+                }
+
+                if (GameManager.Instance.SpendCoins(unlockCosts[index]))
+                {
+                    targetTable.isUnlocked = true;
+                    targetTable.gameObject.SetActive(true);
+                    GameManager.Instance.AddXP(25);
+                    UpdateUpgradeUI();
+                    if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+                }
+                else
+                {
+                    Debug.Log("not enough coins to unlock table " + (index + 1));
+                }
+            }
+            return;
+        }
+
+        if (currentPageIndex == 1)
+        {
+            if (!targetTable.isUnlocked) return;
+
+            int currentTier = targetTable.tableLevel;
+            if (currentTier >= tierCosts.Length) return;
+
+            int requiredLevel = tierLevelRequirements[currentTier];
+            if (playerLevel < requiredLevel) return;
+
+            int cost = tierCosts[currentTier];
+            if (GameManager.Instance.SpendCoins(cost))
+            {
+                targetTable.tableLevel++;
                 GameManager.Instance.AddXP(25);
                 UpdateUpgradeUI();
+
                 if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
             }
-            else
-            {
-                Debug.Log("Not enough coins to unlock Table " + (index + 1));
-            }
-            return;
-        }
-
-        // ── UPGRADE TABLE ──────────────────────────
-        int currentTier = targetTable.tableLevel;
-
-        // Already max tier
-        if (currentTier >= tierCosts.Length)
-        {
-            Debug.Log("Table " + (index + 1) + " is already max tier!");
-            return;
-        }
-
-        // Level gate check
-        int requiredLevel = tierLevelRequirements[currentTier];
-        if (playerLevel < requiredLevel)
-        {
-            Debug.Log("Need Level " + requiredLevel
-                + " to upgrade to Tier " + (currentTier + 1)
-                + ". You are Level " + playerLevel);
-            UpdateUpgradeUI();
-            return;
-        }
-
-        // Spend coins and upgrade
-        int cost = tierCosts[currentTier];
-        if (GameManager.Instance.SpendCoins(cost))
-        {
-            targetTable.tableLevel++;
-            GameManager.Instance.AddXP(25);
-            UpdateUpgradeUI();
-
-            if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
-
-            Debug.Log("Table " + (index + 1)
-                + " upgraded to Tier " + targetTable.tableLevel);
-        }
-        else
-        {
-            Debug.Log("Not enough coins! Need " + cost);
         }
     }
 
     void UpdateUpgradeUI()
     {
-        int playerLevel = LevelSystem.Instance != null
-            ? LevelSystem.Instance.currentLevel
-            : 1;
+        int playerLevel = LevelSystem.Instance != null ? LevelSystem.Instance.currentLevel : 1;
+
+        if (pageTitleText != null)
+        {
+            pageTitleText.text = (currentPageIndex == 0) ? "buy tables" : "upgrade tiers";
+        }
+
+        if (buyPagePanel != null) buyPagePanel.SetActive(currentPageIndex == 0);
+        if (upgradePagePanel != null) upgradePagePanel.SetActive(currentPageIndex == 1);
 
         for (int i = 0; i < tables.Length; i++)
         {
-            if (i >= buttonTexts.Length) break;
-
             CafeTable table = tables[i];
+            if (table == null) continue;
 
-            // Table not yet unlocked
-            if (!table.isUnlocked)
+            bool hasBuyLock = buyPageLockOverlays != null && i < buyPageLockOverlays.Length && buyPageLockOverlays[i] != null;
+            bool hasUpgradeLock = upgradePageLockOverlays != null && i < upgradePageLockOverlays.Length && upgradePageLockOverlays[i] != null;
+            bool hasDesc = descriptionTexts != null && i < descriptionTexts.Length && descriptionTexts[i] != null;
+
+            if (i < buyButtonTexts.Length && buyButtonTexts[i] != null)
             {
-                buttonTexts[i].text = "Unlock Table "
-                    + (i + 1) + ": "
-                    + unlockCosts[i] + " Coins";
-                continue;
+                if (!table.isUnlocked)
+                {
+                    buyButtonTexts[i].text = $"unlock: {unlockCosts[i]} coins";
+                    if (hasDesc && currentPageIndex == 0) 
+                        descriptionTexts[i].text = $"purchase table {i + 1} to expand your shop seating capacity.";
+                }
+                else
+                {
+                    buyButtonTexts[i].text = "already owned";
+                    if (hasDesc && currentPageIndex == 0) 
+                        descriptionTexts[i].text = "table is unlocked! swap to the upgrade menu to increase its tiers.";
+                }
             }
 
-            int currentTier = table.tableLevel;
-
-            // Max tier reached
-            if (currentTier >= tierCosts.Length)
+            if (i < upgradeButtonTexts.Length && upgradeButtonTexts[i] != null)
             {
-                buttonTexts[i].text = "Table "
-                    + (i + 1) + " — MAX TIER";
-                continue;
+                if (!table.isUnlocked)
+                {
+                    upgradeButtonTexts[i].text = "not owned yet";
+                    if (hasDesc && currentPageIndex == 1) 
+                        descriptionTexts[i].text = "unlock this table in the buy panel layout first.";
+                }
+                else
+                {
+                    int currentTier = table.tableLevel;
+
+                    if (currentTier >= tierCosts.Length)
+                    {
+                        upgradeButtonTexts[i].text = "max tier";
+                        if (hasDesc && currentPageIndex == 1) 
+                            descriptionTexts[i].text = $"tier {currentTier} (max)\nincome: +{currentTier} coins";
+                    }
+                    else
+                    {
+                        int cost = tierCosts[currentTier];
+                        upgradeButtonTexts[i].text = $"upgrade: {cost} coins";
+                        
+                        if (hasDesc && currentPageIndex == 1) 
+                            descriptionTexts[i].text = $"tier {currentTier} -> tier {currentTier + 1}\nincome: +{currentTier} -> +{currentTier + 1} coins";
+                    }
+                }
             }
 
-            // Check level requirement for next tier
-            int requiredLevel = tierLevelRequirements[currentTier];
-            int cost = tierCosts[currentTier];
-
-            if (playerLevel < requiredLevel)
+            // Manage Buy Page Lock UI States
+            if (hasBuyLock)
             {
-                buttonTexts[i].text = "Table " + (i + 1)
-                    + " Tier " + (currentTier + 1)
-                    + " — Need Level " + requiredLevel;
+                if (table.isUnlocked)
+                {
+                    buyPageLockOverlays[i].SetActive(false); 
+                }
+                else
+                {
+                    int requiredUnlockLevel = tableUnlockLevelRequirements[i];
+                    buyPageLockOverlays[i].SetActive(playerLevel < requiredUnlockLevel); 
+                }
             }
-            else
+
+            // Manage Upgrade Page Lock UI States
+            if (hasUpgradeLock)
             {
-                buttonTexts[i].text = "Upgrade Table "
-                    + (i + 1)
-                    + " → Tier " + (currentTier + 1)
-                    + ": " + cost + " Coins";
+                if (!table.isUnlocked)
+                {
+                    upgradePageLockOverlays[i].SetActive(true);
+                }
+                else
+                {
+                    int currentTier = table.tableLevel;
+                    if (currentTier >= tierCosts.Length)
+                    {
+                        upgradePageLockOverlays[i].SetActive(false);
+                    }
+                    else
+                    {
+                        int requiredLevel = tierLevelRequirements[currentTier];
+                        upgradePageLockOverlays[i].SetActive(playerLevel < requiredLevel);
+                    }
+                }
             }
         }
     }
 
-    // Call this when player levels up to refresh button states
     public void OnPlayerLevelUp()
     {
         UpdateUpgradeUI();
