@@ -121,10 +121,10 @@ TextureImporter:
       name: Pancakes _0
       rect:
         serializedVersion: 2
-        x: 771
-        y: 1623
-        width: 25
-        height: 12
+        x: 302
+        y: 395
+        width: 1542
+        height: 1461
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

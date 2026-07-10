@@ -10,16 +10,16 @@ public class RecipeManager : MonoBehaviour
     public GameObject recipePanel;
 
     [Header("Grid Cards — assign 5 elements in order")]
-    public Image[]            cardBGs;      // Target your brown cards here
-    public Image[]            foodImages;   // Target your inner FoodImage children here
+    public Image[]            cardBGs;      
+    public Image[]            foodImages;   
     public TextMeshProUGUI[]  nameTexts;
-    public TextMeshProUGUI[]  statusTexts;  // PriceText components
+    public TextMeshProUGUI[]  statusTexts;  
 
     [Header("Combined Top Info Area Layout")]
-    public Image infoFoodImage;                 // "TopFoodPortrait"
-    public TextMeshProUGUI infoDescriptionText; // "TopDescriptionText"
-    public TextMeshProUGUI infoStatsText;       // "TopStatsText"
-    public GameObject infoLearnButton;          // "AvailRecipeButton"
+    public Image infoFoodImage;                 
+    public TextMeshProUGUI infoDescriptionText; 
+    public TextMeshProUGUI infoStatsText;       
+    public GameObject infoLearnButton;          
 
     [Header("Food Sprites Art Assets — assign in order")]
     public Sprite[] foodSprites;
@@ -30,6 +30,16 @@ public class RecipeManager : MonoBehaviour
     private int[] recipePrepTimes = new int[] { 5, 6, 8, 10, 12 };  
     private int[] recipeCoinRewards = new int[] { 20, 25, 35, 50, 75 }; 
     private int[] recipePurchaseCosts = new int[] { 100, 800, 6000, 45000, 300000 }; 
+
+    // ── FIXED: Added unique descriptions for every recipe from your GDD ──
+    private string[] recipeDescriptions = new string[]
+    {
+        "A warm cup of freshly brewed black coffee. Simple and full of caffeine.",
+        "Calming green tea leaves steeped to perfection. A rustic cafe classic.",
+        "A sweet chocolate chip muffin baked fresh this morning. Super fluffy!",
+        "Fluffy golden pancakes stacked high and drenched in sweet maple syrup.",
+        "Our signature house specialty premium blend. With a hint of catnip for that extra kick!"
+    };
 
     private bool[] isRecipePurchased = new bool[] { true, false, false, false, false }; 
     private int currentlySelectedRecipeIndex = 0; 
@@ -59,17 +69,8 @@ public class RecipeManager : MonoBehaviour
     public void OpenRecipePanel()
     {
         if (recipePanel != null)
-        {
-            SmoothPanelAnimator animator = recipePanel.GetComponent<SmoothPanelAnimator>();
-            if (animator != null)
-            {
-                animator.ShowPanel();
-            }
-            else
-            {
-                recipePanel.SetActive(true);
-            }
-        }
+            recipePanel.SetActive(true);
+
         RefreshRecipeUI();
         SelectRecipeCard(0); 
     }
@@ -77,17 +78,7 @@ public class RecipeManager : MonoBehaviour
     public void CloseRecipePanel()
     {
         if (recipePanel != null)
-        {
-            SmoothPanelAnimator animator = recipePanel.GetComponent<SmoothPanelAnimator>();
-            if (animator != null)
-            {
-                animator.HidePanel();
-            }
-            else
-            {
-                recipePanel.SetActive(false);
-            }
-        }
+            recipePanel.SetActive(false);
     }
 
     public void RefreshRecipeUI()
@@ -114,28 +105,19 @@ public class RecipeManager : MonoBehaviour
                     : new Color(0.15f, 0.15f, 0.15f, 1f); 
             }
 
+            // ── FIXED: Removed all emoji characters that print as broken box symbols ──
             if (i < statusTexts.Length && statusTexts[i] != null)
             {
                 if (alreadyOwned)
-                {
-                    // 1. If purchased: Displays "Owned" down below
-                    statusTexts[i].text = "Owned ✓"; 
-                }
+                    statusTexts[i].text = "Owned"; 
                 else if (levelRequirementMet)
-                {
-                    // 2. If available to buy: Displays the GDD coin cost number
                     statusTexts[i].text = recipePurchaseCosts[i].ToString(); 
-                }
                 else
-                {
-                    // 3. If completely locked: Displays the Lock symbol and the required player level
-                    statusTexts[i].text = "🔒 Level " + recipeUnlockLevels[i]; 
-                }
+                    statusTexts[i].text = "Level " + recipeUnlockLevels[i]; 
             }
-        }   
+        }
     }
 
-    // ── NATIVE OUTLINE SWITCH AUTOMATION LOOP ───────────────────────────────
     public void SelectRecipeCard(int index)
     {
         currentlySelectedRecipeIndex = index;
@@ -144,7 +126,6 @@ public class RecipeManager : MonoBehaviour
         bool meetsLevel = currentLevel >= recipeUnlockLevels[index];
         bool alreadyOwned = isRecipePurchased[index];
 
-        // 1. Portrait assignment
         if (infoFoodImage != null)
         {
             if (index < foodSprites.Length && foodSprites[index] != null)
@@ -159,20 +140,23 @@ public class RecipeManager : MonoBehaviour
             }
         }
 
-        if (infoDescriptionText != null)
-            infoDescriptionText.text = "A premium beverage crafted fresh to delight customer orders inside Pawfee Corner.";
+        // ── FIXED: Updates to pull the specific description matching the item clicked ──
+        if (infoDescriptionText != null && index < recipeDescriptions.Length)
+        {
+            infoDescriptionText.text = recipeDescriptions[index];
+        }
 
         if (infoStatsText != null)
         {
-            string statsTextContent = "🐾 Prep time: " + recipePrepTimes[index] + "s\n" +
-                                      "🐾 Rewards: +" + recipeCoinRewards[index] + " Coins\n";
+            string statsTextContent = "Prep time: " + recipePrepTimes[index] + "s\n" +
+                                      "Rewards: +" + recipeCoinRewards[index] + " Coins\n";
 
             if (alreadyOwned)
-                statsTextContent += "<color=green>✨ Status: Unlocked & Active!</color>";
+                statsTextContent += "<color=green>Status: Unlocked</color>";
             else if (meetsLevel)
-                statsTextContent += "<color=yellow>✓ Level requirements met.</color>";
+                statsTextContent += "<color=yellow>Ready to learn.</color>";
             else
-                statsTextContent += "<color=red>❌ Locked: Requires Level " + recipeUnlockLevels[index] + "</color>";
+                statsTextContent += "<color=red>Locked: Level " + recipeUnlockLevels[index] + "</color>";
 
             infoStatsText.text = statsTextContent;
         }
@@ -189,21 +173,18 @@ public class RecipeManager : MonoBehaviour
                 TMP_Text buttonLabel = infoLearnButton.GetComponentInChildren<TMP_Text>();
                 if (buttonLabel != null)
                 {
-                    buttonLabel.text = "Learn: " + recipePurchaseCosts[index] + " Coins";
+                    buttonLabel.text = "Learn";
                 }
             }
         }
 
-        // 5. ── LOOP CHANNELS: TOGGLE COMPONENT OUTLINES ON CLICK ──────────────
         for (int i = 0; i < cardBGs.Length; i++)
         {
             if (cardBGs[i] != null)
             {
-                // Find Unity's native Outline script attached directly onto the card parent
                 Outline cardOutline = cardBGs[i].GetComponent<Outline>();
                 if (cardOutline != null)
                 {
-                    // If this matches our active clicked index position -> Turn ON. Otherwise -> Turn OFF!
                     cardOutline.enabled = (i == index);
                 }
             }
