@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEngine.UI;
+
 public class AnimalStarsManager : MonoBehaviour
 {
     public static AnimalStarsManager Instance;
@@ -12,6 +13,13 @@ public class AnimalStarsManager : MonoBehaviour
 
     [Header("Optional UI")]
     public TextMeshProUGUI starsText;
+
+    // ── FINISHED: INTEGRATED PLAYTEST VISUAL SPRITE ASSETS ──────────────────
+    [Header("Visual Star Configuration")]
+    [Tooltip("Drag Star_0 through Star_4 here from your Hierarchy in order")]
+    public Image[] starImages;            
+    public Sprite filledStarSprite;       // Drag your '5 stars filled' art asset here
+    public Sprite blankStarSprite;        // Drag your '5 stars blank' art asset here
 
     [Header("Streak Tracking")]
     private int currentServingStreak = 0;
@@ -25,7 +33,7 @@ public class AnimalStarsManager : MonoBehaviour
     {
         if (Instance == null)
         {
-            Instance =  this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -42,7 +50,7 @@ public class AnimalStarsManager : MonoBehaviour
 
     void Update()
     {
-        // active play grants +0.25 stars every 90 seconds
+        // active play grants +0.25 stars every 75 seconds
         passiveTimer += Time.deltaTime;
         if(passiveTimer >= RecoveryInterval)
         {
@@ -51,6 +59,7 @@ public class AnimalStarsManager : MonoBehaviour
             Debug.Log("Animal Stars: Passive Active play recovery granted (+0.25).");
         }
     }
+
     //---PUBLIC MODIFIERS---------------------------------------------
     public void AddStars(float amount)
     {
@@ -78,16 +87,17 @@ public class AnimalStarsManager : MonoBehaviour
         {
             float bonus = animalStars < 2.5f ? 0.15f : 0.25f;
             AddStars(0.25f);
-            Debug.Log("Streak: 5 customers served (+ "+bonus+" 0.25 Stars).");
+            Debug.Log("Streak: 5 customers served (+ " + bonus + " 0.25 Stars).");
         }
         else if (currentServingStreak == 10)
         {   
-            float bonus = animalStars < 2.5 ? 0.25f : 0.5f;
+            float bonus = animalStars < 2.5f ? 0.25f : 0.5f;
             AddStars(0.50f);
-            Debug.Log("Streak: ! 10 customers served ("+bonus+" 0.50 Stars). Resetting streak counter");
+            Debug.Log("Streak: ! 10 customers served (" + bonus + " 0.50 Stars). Resetting streak counter");
             currentServingStreak = 0;
         }
     }
+
     //--- REWARD MULTIPLIERS-------------------------------------------------
     public float GetCoinMultiplier()
     {
@@ -101,7 +111,6 @@ public class AnimalStarsManager : MonoBehaviour
     // called by customerspawner to slowdown if reputation drops
     public float GetSpawnRateMultiplier()
     {
-    
         if(animalStars < 1.5f) return 0.6f;
         return 1.0f; 
     }
@@ -109,10 +118,41 @@ public class AnimalStarsManager : MonoBehaviour
     //--- SYSTEM ARCHITECTURE-------------------------------------------\
     void UpdateUI()
     {
+        // 1. Maintain your original text display formatting strings safely
         if (starsText != null)
         {
             starsText.text = "Stars " + animalStars.ToString("F1") + " ⭐";
         }  
+
+        // 2. Dynamically calculate fractional fill values for each star box
+        if (starImages == null || starImages.Length == 0) return;
+
+        for (int i = 0; i < starImages.Length; i++)
+        {
+            if (starImages[i] != null)
+            {
+                // The baseline value required to start filling this specific star (e.g., 1.0 for Star_0, 2.0 for Star_1)
+                float targetStarBaseline = i + 1f;
+
+                if (animalStars >= targetStarBaseline)
+                {
+                    // If your total score is higher than this star's limit, it is 100% full
+                    starImages[i].fillAmount = 1f;
+                }
+                else if (animalStars > targetStarBaseline - 1f)
+                {
+                    // If your score is currently inside this star's fraction zone (e.g., 3.4 is inside Star_3's zone)
+                    // Calculate the exact fractional remainder (e.g., 3.4 - 3.0 = 0.4 fill amount)
+                    float remainderFraction = animalStars - (targetStarBaseline - 1f);
+                    starImages[i].fillAmount = Mathf.Clamp01(remainderFraction);
+                }
+                else
+                {
+                    // If your score hasn't even reached this star's zone yet, it stays completely empty
+                    starImages[i].fillAmount = 0f;
+                }
+            }
+        }
     }
 
     void SaveGameData()
