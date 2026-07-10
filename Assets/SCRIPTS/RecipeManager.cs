@@ -117,13 +117,22 @@ public class RecipeManager : MonoBehaviour
             if (i < statusTexts.Length && statusTexts[i] != null)
             {
                 if (alreadyOwned)
-                    statusTexts[i].text = ""; 
+                {
+                    // 1. If purchased: Displays "Owned" down below
+                    statusTexts[i].text = "Owned ✓"; 
+                }
                 else if (levelRequirementMet)
+                {
+                    // 2. If available to buy: Displays the GDD coin cost number
                     statusTexts[i].text = recipePurchaseCosts[i].ToString(); 
+                }
                 else
-                    statusTexts[i].text = "Level " + recipeUnlockLevels[i]; 
+                {
+                    // 3. If completely locked: Displays the Lock symbol and the required player level
+                    statusTexts[i].text = "🔒 Level " + recipeUnlockLevels[i]; 
+                }
             }
-        }
+        }   
     }
 
     // ── NATIVE OUTLINE SWITCH AUTOMATION LOOP ───────────────────────────────
