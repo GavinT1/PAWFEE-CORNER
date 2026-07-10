@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8820037477571730549
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.6, y: -0.384}
+  m_AnchoredPosition: {x: -1.66, y: 0.19}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &9087759190491915137
@@ -83,12 +83,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: -5968798352761525847, guid: 9bead48a0a0dac847b2904afd27cd1bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 18.69, y: 17.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -142,6 +142,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 745197d15b4eb4212839c2337bd4c07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 9087759190491915137}
+  orderBubbleSprites:
+  - {fileID: -2351088116026164484, guid: ab9308a050310f84b844e20504a58389, type: 3}
+  - {fileID: 12358655418457846, guid: 7713f1dc8e059f542a82755f28813bbe, type: 3}
+  - {fileID: -8737082050677736735, guid: 2f4deee71ef944d4cb7d987f57b26eb7, type: 3}
+  - {fileID: 8224994385999992164, guid: f5599ddc4feb3ce44b912e9cef02b7c8, type: 3}
+  - {fileID: -1216549340387189367, guid: 43c23bf696b0db742b04e3619e4f59a9, type: 3}
 --- !u!114 &4456802534701677709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,7 +241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.096}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &3803787207775825918

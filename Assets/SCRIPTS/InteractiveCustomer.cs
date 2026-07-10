@@ -84,9 +84,44 @@ public class InteractiveCustomer : MonoBehaviour
 
     IEnumerator SettleAndShowBubble()
     {
-        yield return new WaitForSeconds(1.0f);
+       yield return new WaitForSeconds(1.0f);
+        
         if (orderBubble != null)
+        {
+            // 1. Fetch your active recipe unlock states list array from the RecipeManager
+            if (RecipeManager.Instance != null)
+            {
+                bool[] unlockStates = RecipeManager.Instance.GetRecipeUnlockStates();
+                
+                // Count how many recipes are currently unlocked/purchased
+                System.Collections.Generic.List<int> unlockedIndices = new System.Collections.Generic.List<int>();
+                
+                for (int i = 0; i < unlockStates.Length; i++)
+                {
+                    if (unlockStates[i])
+                    {
+                        unlockedIndices.Add(i); // Add valid index choice (e.g., 0 for Coffee, 1 for Tea)
+                    }
+                }
+
+                // 2. Select a random index explicitly from your unlocked list choices array
+                if (unlockedIndices.Count > 0)
+                {
+                    int randomIndexChooser = Random.Range(0, unlockedIndices.Count);
+                    int chosenRecipeIndex = unlockedIndices[randomIndexChooser];
+
+                    // 3. Pass that specific chosen food index number to the order bubble script
+                    OrderBubble bubbleScript = orderBubble.GetComponent<OrderBubble>();
+                    if (bubbleScript != null)
+                    {
+                        bubbleScript.SetOrderGraphic(chosenRecipeIndex);
+                    }
+                }
+            }
+
+            // Turn on the physical bubble GameObject visual rendering layer
             orderBubble.SetActive(true);
+        }
     }
 
     public void OnBubbleClicked()
