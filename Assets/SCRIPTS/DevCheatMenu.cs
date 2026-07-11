@@ -36,11 +36,23 @@ public class DevCheatMenu : MonoBehaviour
             
             Debug.Log($"DevCheatMenu: Cheated Level Up! Current Level is now: {LevelSystem.Instance.currentLevel}");
 
+            // ── FIXED: Added explicit UI text and slider redraw calls ─────────
+            LevelSystem.Instance.UpdateLevelUI();
+
+            // Refresh table shop button prices/level-gate displays
             if (UpgradeManager.Instance != null)
             {
                 UpgradeManager.Instance.OnPlayerLevelUp();
             }
 
+            // Refresh recipe shop prices/level-gate displays if menu is open
+            if (RecipeManager.Instance != null)
+            {
+                RecipeManager.Instance.RefreshRecipeUI();
+                RecipeManager.Instance.SelectRecipeCard(0); // Safely forces the top preview to refresh
+            }
+
+            // Save the progress instantly to disk
             if (SaveSystem.Instance != null)
             {
                 SaveSystem.Instance.Save();
