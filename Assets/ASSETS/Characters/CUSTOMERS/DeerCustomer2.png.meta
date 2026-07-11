@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7fe3ededf60dc6045b60667be601515a
+guid: df80f0ba61812634796540b1203f8226
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2630417782041975056
-    second: BunniesCleaners_0
+      213: -6058780919813966538
+    second: DeerCustomer2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,19 +97,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -126,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BunniesCleaners_0
+      name: DeerCustomer2_0
       rect:
         serializedVersion: 2
-        x: 122
-        y: 162
-        width: 414
-        height: 497
+        x: 0
+        y: 0
+        width: 612
+        height: 792
       alignment: 9
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0199b75490f118420800000000000000
-      internalID: 2630417782041975056
+      spriteID: 635f29eaad2eaeba0800000000000000
+      internalID: -6058780919813966538
       vertices: []
       indices: 
       edges: []
@@ -151,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 856d8651612765c479e664f06e1ba6df
+    spriteID: fdd0804c62e2aeb46bf30bcd70c98bb2
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BunniesCleaners_0: 2630417782041975056
+      DeerCustomer2_0: -6058780919813966538
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
