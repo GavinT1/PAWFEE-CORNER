@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI; // ADDED: Needed for Image component
 using TMPro;
 
 public class UpgradeManager : MonoBehaviour
@@ -8,6 +9,12 @@ public class UpgradeManager : MonoBehaviour
 
     [Header("Buy Panel Text Display Area")]
     public TMP_Text[] buyButtonTexts; 
+
+    // ADDED: Your image array and custom sprites
+    [Header("Custom UI Button Modifiers")]
+    public Image[] buyButtonImages;
+    public Sprite checkmarkButtonSprite;
+    public Sprite normalButtonSprite;
 
     [Header("Upgrade Panel Text Display Area")]
     public TMP_Text[] upgradeButtonTexts; 
@@ -194,12 +201,24 @@ public class UpgradeManager : MonoBehaviour
                     buyButtonTexts[i].text = $"unlock: {unlockCosts[i]} coins";
                     if (hasDesc && currentPageIndex == 0) 
                         descriptionTexts[i].text = $"purchase table {i + 1} to expand your shop seating capacity.";
+
+                    // ADDED: Set normal brown background image if not owned
+                    if (buyButtonImages != null && i < buyButtonImages.Length && buyButtonImages[i] != null && normalButtonSprite != null)
+                    {
+                        buyButtonImages[i].sprite = normalButtonSprite;
+                    }
                 }
                 else
                 {
                     buyButtonTexts[i].text = "already owned";
                     if (hasDesc && currentPageIndex == 0) 
                         descriptionTexts[i].text = "table is unlocked! swap to the upgrade menu to increase its tiers.";
+
+                    // ADDED: Swap background image to your custom check button UI
+                    if (buyButtonImages != null && i < buyButtonImages.Length && buyButtonImages[i] != null && checkmarkButtonSprite != null)
+                    {
+                        buyButtonImages[i].sprite = checkmarkButtonSprite;
+                    }
                 }
             }
 
