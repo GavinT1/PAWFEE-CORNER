@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // ADDED: Needed for Image component
+using UnityEngine.UI; // Needed for Image component
 using TMPro;
 
 public class UpgradeManager : MonoBehaviour
@@ -10,11 +10,17 @@ public class UpgradeManager : MonoBehaviour
     [Header("Buy Panel Text Display Area")]
     public TMP_Text[] buyButtonTexts; 
 
-    // ADDED: Your image array and custom sprites
     [Header("Custom UI Button Modifiers")]
     public Image[] buyButtonImages;
     public Sprite checkmarkButtonSprite;
     public Sprite normalButtonSprite;
+
+    // ADDED: Your new custom UI modifiers for the Upgrade Panel
+    [Header("Custom Upgrade UI Button Modifiers")]
+    public Image[] upgradeButtonImages;
+    public Sprite notOwnedUpgradeButtonSprite;
+    public Sprite normalUpgradeButtonSprite;
+    public Sprite maxUpgradeButtonSprite;
 
     [Header("Upgrade Panel Text Display Area")]
     public TMP_Text[] upgradeButtonTexts; 
@@ -202,7 +208,6 @@ public class UpgradeManager : MonoBehaviour
                     if (hasDesc && currentPageIndex == 0) 
                         descriptionTexts[i].text = $"purchase table {i + 1} to expand your shop seating capacity.";
 
-                    // ADDED: Set normal brown background image if not owned
                     if (buyButtonImages != null && i < buyButtonImages.Length && buyButtonImages[i] != null && normalButtonSprite != null)
                     {
                         buyButtonImages[i].sprite = normalButtonSprite;
@@ -214,7 +219,6 @@ public class UpgradeManager : MonoBehaviour
                     if (hasDesc && currentPageIndex == 0) 
                         descriptionTexts[i].text = "table is unlocked! swap to the upgrade menu to increase its tiers.";
 
-                    // ADDED: Swap background image to your custom check button UI
                     if (buyButtonImages != null && i < buyButtonImages.Length && buyButtonImages[i] != null && checkmarkButtonSprite != null)
                     {
                         buyButtonImages[i].sprite = checkmarkButtonSprite;
@@ -229,6 +233,12 @@ public class UpgradeManager : MonoBehaviour
                     upgradeButtonTexts[i].text = "not owned yet";
                     if (hasDesc && currentPageIndex == 1) 
                         descriptionTexts[i].text = "unlock this table in the buy panel layout first.";
+
+                    // ADDED: Swap to 'not owned yet' lock button UI sprite
+                    if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && notOwnedUpgradeButtonSprite != null)
+                    {
+                        upgradeButtonImages[i].sprite = notOwnedUpgradeButtonSprite;
+                    }
                 }
                 else
                 {
@@ -239,6 +249,12 @@ public class UpgradeManager : MonoBehaviour
                         upgradeButtonTexts[i].text = "max tier";
                         if (hasDesc && currentPageIndex == 1) 
                             descriptionTexts[i].text = $"tier {currentTier} (max)\nincome: +{currentTier} coins";
+
+                        // ADDED: Swap to green 'max level' button UI sprite
+                        if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && maxUpgradeButtonSprite != null)
+                        {
+                            upgradeButtonImages[i].sprite = maxUpgradeButtonSprite;
+                        }
                     }
                     else
                     {
@@ -247,6 +263,12 @@ public class UpgradeManager : MonoBehaviour
                         
                         if (hasDesc && currentPageIndex == 1) 
                             descriptionTexts[i].text = $"tier {currentTier} -> tier {currentTier + 1}\nincome: +{currentTier} -> +{currentTier + 1} coins";
+
+                        // ADDED: Swap to standard active upgrade button UI sprite
+                        if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && normalUpgradeButtonSprite != null)
+                        {
+                            upgradeButtonImages[i].sprite = normalUpgradeButtonSprite;
+                        }
                     }
                 }
             }
