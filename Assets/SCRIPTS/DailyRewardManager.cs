@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System;
+using TMPro;
 
 public enum RewardType
 {
@@ -73,6 +73,12 @@ public class DailyRewardManager : MonoBehaviour
 
             // Grant the reward
             GrantReward(rewardToClaim);
+
+            // ── FIXED: Plays daily reward sound upon successful item claim ─────
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayDailyReward();
+            }
 
             // Save date & streak
             lastClaimedDate = DateTime.Now.Date.ToString("o");
@@ -192,10 +198,22 @@ public class DailyRewardManager : MonoBehaviour
     public void OpenPanel()
     {
         if (rewardPanel != null) rewardPanel.SetActive(true);
+
+        // ── FIXED: Plays a panel open clip when dashboard displays ───────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelOpen();
+        }
     }
 
     public void ClosePanel()
     {
         if (rewardPanel != null) rewardPanel.SetActive(false);
+
+        // ── FIXED: Plays a panel close clip when dashboard dismisses ─────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelClose();
+        }
     }
 }

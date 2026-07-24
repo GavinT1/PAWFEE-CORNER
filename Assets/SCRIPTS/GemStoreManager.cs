@@ -15,6 +15,12 @@ public class GemStoreManager : MonoBehaviour
 
     public void OpenGemStore()
     {
+        // ── AUDIO HOOK: Play slide open sfx ─────────────────────────────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelOpen();
+        }
+
         if (gemStorePanel != null)
         {
             SmoothPanelAnimator animator = gemStorePanel.GetComponent<SmoothPanelAnimator>();
@@ -31,6 +37,12 @@ public class GemStoreManager : MonoBehaviour
 
     public void CloseGemStore()
     {
+        // ── AUDIO HOOK: Play slide close sfx ────────────────────────────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelClose();
+        }
+
         if (gemStorePanel != null) 
         {
             SmoothPanelAnimator animator = gemStorePanel.GetComponent<SmoothPanelAnimator>();
@@ -68,6 +80,12 @@ public class GemStoreManager : MonoBehaviour
     private void ProcessFakePurchase(int gemAmount)
     {
         GameManager.Instance.AddGems(gemAmount);
+
+        // ── AUDIO HOOK: Play crisp purchase click sfx ───────────────────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayButtonClick();
+        }
 
         if (SaveSystem.Instance != null)
         {

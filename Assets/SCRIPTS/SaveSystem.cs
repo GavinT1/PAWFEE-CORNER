@@ -106,10 +106,25 @@ public class SaveSystem : MonoBehaviour
         data.lastSessionTime = System.DateTime.Now.ToString();
 
         // Settings
-        data.musicOn = (SettingsManager.Instance != null && SettingsManager.Instance.musicToggle != null)
-            ? SettingsManager.Instance.musicToggle.isOn: true;
-        data.sfxOn   = (SettingsManager.Instance != null && SettingsManager.Instance.sfxToggle != null)
-            ? SettingsManager.Instance.sfxToggle.isOn: true;
+        if (SettingsManager.Instance != null && SettingsManager.Instance.musicSlider != null)
+        {
+            // If the slider handle is dragged above 0, music is saved as active (true)
+            data.musicOn = SettingsManager.Instance.musicSlider.value > 0.01f;
+        }
+        else
+        {
+            data.musicOn = true;
+        }
+
+        if (SettingsManager.Instance != null && SettingsManager.Instance.sfxSlider != null)
+        {
+            data.sfxOn = SettingsManager.Instance.sfxSlider.value > 0.01f;
+        }
+        else
+        {
+            data.sfxOn = true;
+        }
+
 
         // saving recipes
         if (RecipeManager.Instance != null)

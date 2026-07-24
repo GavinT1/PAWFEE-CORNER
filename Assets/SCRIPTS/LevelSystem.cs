@@ -81,6 +81,8 @@ public class LevelSystem : MonoBehaviour
     //--- LEVEL UP EVENT -----------------------------------------------
     void OnLevelUp(int newLevel)
     {
+         if (SoundManager.Instance != null) SoundManager.Instance.PlayLevelUp();
+
         Debug.Log("LEVEL UP! Now Level " + newLevel);
 
         // tier unloock at odd levels

@@ -30,6 +30,8 @@ public class DevCheatMenu : MonoBehaviour
 
     public void CheatLevelUp()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayLevelUp();
+
         if (LevelSystem.Instance != null)
         {
             LevelSystem.Instance.currentLevel++;

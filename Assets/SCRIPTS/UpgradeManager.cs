@@ -313,6 +313,8 @@ public class UpgradeManager : MonoBehaviour
 
     public void OnPlayerLevelUp()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayLevelUp();
+
         UpdateUpgradeUI();
     }
 

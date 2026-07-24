@@ -183,6 +183,9 @@ public class InteractiveCustomer : MonoBehaviour
             coinScript.TriggerPhysicalPopAnimation();
         }
 
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayCoinDrop();
+
+
         if (AnimalStarsManager.Instance != null)
             AnimalStarsManager.Instance.RecordSuccessfulService();
 

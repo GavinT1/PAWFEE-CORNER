@@ -22,12 +22,20 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         Debug.Log("PLAY button clicked! Loading scene: " + gameplaySceneName);
+        
+        // ── AUDIO HOOK: Play crisp click on menu selection
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayButtonClick();
+
         LoadingScreenManager.LoadScene(gameplaySceneName);
     }
 
     public void OnStoreButtonClicked()
     {
         Debug.Log("STORE button clicked!");
+        
+        // ── AUDIO HOOK: Play slide open sfx
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelOpen();
+
         if (shopPanel != null)
         {
             SmoothPanelAnimator animator = shopPanel.GetComponent<SmoothPanelAnimator>();
@@ -45,6 +53,10 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnCloseStoreButtonClicked()
     {
         Debug.Log("Closed Store Button");
+        
+        // ── AUDIO HOOK: Play slide close sfx
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelClose();
+
         if (shopPanel != null)
         {
             SmoothPanelAnimator animator = shopPanel.GetComponent<SmoothPanelAnimator>();
@@ -62,6 +74,10 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnSettingsButtonClicked()
     {
         Debug.Log("SETTINGS button clicked!");
+        
+        // ── AUDIO HOOK: Play slide open sfx
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelOpen();
+
         if (settingsPanel != null)
         {
             SmoothPanelAnimator animator = settingsPanel.GetComponent<SmoothPanelAnimator>();
@@ -79,6 +95,10 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnCloseSettingsButtonClicked()
     {
         Debug.Log("Closed Settings Button");
+        
+        // ── AUDIO HOOK: Play slide close sfx
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelClose();
+
         if (settingsPanel != null)
         {
             SmoothPanelAnimator animator = settingsPanel.GetComponent<SmoothPanelAnimator>();
@@ -96,15 +116,18 @@ public class MainMenuButtonScripts : MonoBehaviour
     public void OnDailyRewardButtonClicked()
     {
         Debug.Log("DAILY REWARD button clicked!");
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayButtonClick();
     }
 
     public void OnCollectOilButtonClicked()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayButtonClick();
         if (DailyRewardManager.Instance != null) DailyRewardManager.Instance.OpenDailyReward();
     }
 
     public void OnCreditsButtonClicked()
     {
         Debug.Log("CREDITS button clicked!");
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayButtonClick();
     }
 }

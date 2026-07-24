@@ -1,27 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.Rendering;
 
 public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance;
+    
     [Header("Panels")]
     public GameObject settingsPanel;
 
-    [Header("Toggle References")]
-    public Toggle musicToggle;
-    public Toggle sfxToggle;
+    [Header("Slider References")]
+    public Slider musicSlider;
+    public Slider sfxSlider;
 
-    [Header("Audio Sources")]
+    [Header("Audio Sources (Scene Fallbacks)")]
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        // Allowed to overwrite or re-bind securely across scene shifts
+        Instance = this;
     }
 
     void Start()
@@ -35,54 +34,88 @@ public class SettingsManager : MonoBehaviour
     public void OpenSettings()
     {
         if (settingsPanel != null) settingsPanel.SetActive(true);
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelOpen();
     }
+    
     public void CloseSettings()
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelClose();
     }
 
-    //--- TOGGLES -------------------------------
-    public void OnMusicToggleChanged()
+    //--- SLIDER LOGIC DRIVERS ────────────────────────────────────────────────
+    public void OnMusicSliderChanged()
     {
-        bool isOn = musicToggle.isOn;
+        if (musicSlider == null) return;
+        float value = musicSlider.value; // Float between 0.0 and 1.0
 
-        if(musicSource != null) musicSource.mute = !isOn;
+        // Update local scene fallback channel if it exists
+        if (musicSource != null) musicSource.volume = value;
+
+        // Push volume scaling dynamically down into the global persistent SoundManager channels
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.SetMusicVolume(value);
+        }
 
         SaveSettings();
-        Debug.Log("Music: " + (isOn ? "ON" : "OFF"));
+        Debug.Log("Live Music Volume Set To: " + value);
     }
 
-    public void OnSFXToggleChanged()
+    public void OnSFXSliderChanged()
     {
-        bool isOn = sfxToggle.isOn;
+        if (sfxSlider == null) return;
+        float value = sfxSlider.value; // Float between 0.0 and 1.0
 
-        if (sfxSource != null) sfxSource.mute = !isOn;
+        // Update local scene fallback channel if it exists
+        if (sfxSource != null) sfxSource.volume = value;
+
+        // Push volume scaling dynamically down into the global persistent SoundManager channels
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.SetSFXVolume(value);
+        }
 
         SaveSettings();
-        Debug.Log("SFX: " + (isOn ? "ON" : "OFF"));
+        Debug.Log("Live SFX Volume Set To: " + value);
     }
 
     //--- SAVE AND LOAD ------------------------------
     void SaveSettings()
     {
-        if(SaveSystem.Instance != null) SaveSystem.Instance.Save();
+        if (SaveSystem.Instance != null)
+        {
+            // Convert values over smoothly to save variables
+            GameData data = SaveSystem.Instance.Load();
+            if (data != null)
+            {
+                // If slider is completely turned down to 0, save as muted/false
+                data.musicOn = (musicSlider != null) ? (musicSlider.value > 0.01f) : true;
+                data.sfxOn = (sfxSlider != null) ? (sfxSlider.value > 0.01f) : true;
+            }
+            SaveSystem.Instance.Save();
+        }
     }
 
     void LoadSettings()
     {
-        if(SaveSystem.Instance == null) return;
+        if (SaveSystem.Instance == null) return;
 
         GameData data = SaveSystem.Instance.Load();
-        if (musicToggle != null)
+        
+        // Re-align your UI element filling tracking metrics
+        if (musicSlider != null)
         {
-            musicToggle.isOn = data.musicOn;
-            if (musicSource != null) musicSource.mute = !data.musicOn;
+            musicSlider.value = data.musicOn ? 1.0f : 0.0f;
+            if (musicSource != null) musicSource.volume = musicSlider.value;
+            if (SoundManager.Instance != null) SoundManager.Instance.SetMusicVolume(musicSlider.value);
         }
 
-        if (sfxToggle != null)
+        if (sfxSlider != null)
         {
-            sfxToggle.isOn = data.sfxOn;
-            if(sfxSource != null) sfxSource.mute = !data.sfxOn;
+            sfxSlider.value = data.sfxOn ? 1.0f : 0.0f;
+            if (sfxSource != null) sfxSource.volume = sfxSlider.value;
+            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxSlider.value);
         }
     }
 }

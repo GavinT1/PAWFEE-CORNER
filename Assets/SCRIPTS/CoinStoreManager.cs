@@ -15,6 +15,12 @@ public class CoinStoreManager : MonoBehaviour
 
     public void OpenCoinStore()
     {
+        // ── AUDIO HOOK: Play slide open sfx ─────────────────────────────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelOpen();
+        }
+
         if (coinStorePanel != null) 
         {
             SmoothPanelAnimator animator = coinStorePanel.GetComponent<SmoothPanelAnimator>();
@@ -31,6 +37,12 @@ public class CoinStoreManager : MonoBehaviour
 
     public void CloseCoinStore()
     {
+        // ── AUDIO HOOK: Play slide close sfx ────────────────────────────────
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayPanelClose();
+        }
+
         if (coinStorePanel != null)
         {
             SmoothPanelAnimator animator = coinStorePanel.GetComponent<SmoothPanelAnimator>();
@@ -66,6 +78,12 @@ public class CoinStoreManager : MonoBehaviour
         {
             GameManager.Instance.AddCoins(coinReward);
 
+            // ── AUDIO HOOK: Play the coin reward drop sfx ────────────────────
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayCoinDrop();
+            }
+
             if (SaveSystem.Instance != null)
             {
                 SaveSystem.Instance.Save();
@@ -80,6 +98,12 @@ public class CoinStoreManager : MonoBehaviour
         else
         {
             Debug.Log("Not enough gems to buy this coin bundle!");
+            
+            // OPTIONAL: Play a normal tap button click even if transaction fails 
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayButtonClick();
+            }
         }
     }
 

@@ -71,6 +71,8 @@ public class RecipeManager : MonoBehaviour
         if (recipePanel != null)
             recipePanel.SetActive(true);
 
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelOpen();
+
         RefreshRecipeUI();
         SelectRecipeCard(0); 
     }
@@ -79,6 +81,9 @@ public class RecipeManager : MonoBehaviour
     {
         if (recipePanel != null)
             recipePanel.SetActive(false);
+
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelClose();
+
     }
 
     public void RefreshRecipeUI()
@@ -120,6 +125,8 @@ public class RecipeManager : MonoBehaviour
 
     public void SelectRecipeCard(int index)
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayButtonClick();
+
         currentlySelectedRecipeIndex = index;
         
         int currentLevel = LevelSystem.Instance != null ? LevelSystem.Instance.currentLevel : 1;
