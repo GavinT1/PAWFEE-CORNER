@@ -2464,6 +2464,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1658783261}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlayPanelOpen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11500000, guid: c38842f57bd95a3498c3fa5f5b4c654d, type: 3}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &697828961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5094,6 +5118,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinStorePanel: {fileID: 0}
   successPanel: {fileID: 0}
+--- !u!1 &1658783260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1658783262}
+  - component: {fileID: 1658783261}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1658783261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658783260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcea321cc831c9f48a0b428a5f3be5b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  cafeBgm: {fileID: 8300000, guid: 5f43f5a06a6b40143b95ad821097327a, type: 3}
+  buttonClickSfx: {fileID: 8300000, guid: d1c208cbbc8a756459f03a76976ee49f, type: 3}
+  coinDropSfx: {fileID: 8300000, guid: 3ddc4500b525fee4d9943547c3b73e4e, type: 3}
+  dailyRewardSfx: {fileID: 8300000, guid: 5f8c32f809e5b4847947c4cf434c6ca9, type: 3}
+  levelUpSfx: {fileID: 8300000, guid: cfdf533199420f141b4c554b974ed9ad, type: 3}
+  panelOpenSfx: {fileID: 8300000, guid: 9684e3d254b085342b130c1f53b27b34, type: 3}
+  panelCloseSfx: {fileID: 8300000, guid: 6cd03aeebddd0ee47af3ac63254c1c98, type: 3}
+--- !u!4 &1658783262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658783260}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 598.9581, y: 610.6195, z: -2.5932093}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1715095212
 GameObject:
   m_ObjectHideFlags: 0
@@ -6789,3 +6866,4 @@ SceneRoots:
   - {fileID: 1226778587}
   - {fileID: 1623362825}
   - {fileID: 1731632193}
+  - {fileID: 1658783262}
