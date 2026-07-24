@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.IO;
-using UnityEngine.UIElements;
 
 [System.Serializable]
 public class GameData
@@ -72,9 +71,13 @@ public class SaveSystem : MonoBehaviour
         GameData data = new GameData();
 
         // Currencies
-        data.coins = GameManager.Instance.coins;
-        data.gems  = GameManager.Instance.gems;
-        data.xp    = GameManager.Instance.xp;
+        if (GameManager.Instance != null)
+        {
+            data.coins = GameManager.Instance.coins;
+            data.gems  = GameManager.Instance.gems;
+            data.xp    = GameManager.Instance.xp;
+            data.boosterCharges = GameManager.Instance.boosterCharges;
+        }
 
         // Level
         data.currentLevel = LevelSystem.Instance != null
@@ -90,30 +93,25 @@ public class SaveSystem : MonoBehaviour
 
         // Animal Stars
         data.animalStars = AnimalStarsManager.Instance != null
-            ? AnimalStarsManager.Instance.animalStars: 1.0f;
-
+            ? AnimalStarsManager.Instance.animalStars : 1.0f;
 
         // Daily reward 
         data.lastDailyRewardClaimed = DailyRewardManager.Instance != null
-            ? DailyRewardManager.Instance.lastClaimedDate: "";
+            ? DailyRewardManager.Instance.lastClaimedDate : "";
         data.dailyRewardStreak      = DailyRewardManager.Instance != null
-            ? DailyRewardManager.Instance.currentStreak: 0;
-
-        // BoosterCharge
-        data.boosterCharges = GameManager.Instance.boosterCharges;
+            ? DailyRewardManager.Instance.currentStreak : 0;
 
         // Last session time
         data.lastSessionTime = System.DateTime.Now.ToString();
 
-        // Settings
+        // Settings (Check slider if open, otherwise check PlayerPrefs)
         if (SettingsManager.Instance != null && SettingsManager.Instance.musicSlider != null)
         {
-            // If the slider handle is dragged above 0, music is saved as active (true)
             data.musicOn = SettingsManager.Instance.musicSlider.value > 0.01f;
         }
         else
         {
-            data.musicOn = true;
+            data.musicOn = PlayerPrefs.GetFloat("MusicVolume", 1.0f) > 0.01f;
         }
 
         if (SettingsManager.Instance != null && SettingsManager.Instance.sfxSlider != null)
@@ -122,9 +120,8 @@ public class SaveSystem : MonoBehaviour
         }
         else
         {
-            data.sfxOn = true;
+            data.sfxOn = PlayerPrefs.GetFloat("SFXVolume", 1.0f) > 0.01f;
         }
-
 
         // saving recipes
         if (RecipeManager.Instance != null)
@@ -133,7 +130,7 @@ public class SaveSystem : MonoBehaviour
         }
         else
         {
-            data.recipeUnlocks = new bool[]{ true, false, false, false, false};
+            data.recipeUnlocks = new bool[]{ true, false, false, false, false };
         }
 
         string json = JsonUtility.ToJson(data, true);
@@ -172,7 +169,7 @@ public class SaveSystem : MonoBehaviour
         // 1. Delete JSON File
         DeleteSave();
 
-        // 2. Wipe PlayerPrefs (Daily Reward Keys)
+        // 2. Wipe PlayerPrefs (Daily Reward Keys & Settings)
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
 
@@ -199,7 +196,7 @@ public class SaveSystem : MonoBehaviour
             animalStars            = 1.0f,
             musicOn                = true,
             sfxOn                  = true,
-            recipeUnlocks = new bool[] { true, false, false, false, false},
+            recipeUnlocks          = new bool[] { true, false, false, false, false },
             tableUnlockedStates    = new bool[] { true, false, false, false, false }, // First table is unlocked
             tableTiers             = new int[] { 1, 1, 1, 1, 1 },  
         };

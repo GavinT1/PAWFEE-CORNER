@@ -51,14 +51,13 @@ public class DailyRewardManager : MonoBehaviour
 
     private void Start()
     {
+        lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
+        currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
 
-    lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
-    currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
+        UpdateUIVisuals(currentStreak);
 
-    UpdateUIVisuals(currentStreak);
-
-    CheckAndAutoClaim();
-   }
+        CheckAndAutoClaim();
+    }
 
     // Added method so MainMenuButtonScripts.cs can call it without CS1061 error!
     public void OpenDailyReward()
@@ -175,7 +174,14 @@ public class DailyRewardManager : MonoBehaviour
             case RewardType.Coins:
                 if (GameManager.Instance != null)
                 {
-                    // Add coins if applicable
+                    GameManager.Instance.AddCoins(reward.amount);
+                }
+                break;
+
+            case RewardType.Gems:
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.gems += reward.amount;
                 }
                 break;
 
@@ -194,7 +200,13 @@ public class DailyRewardManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"AUTO-CLAIMED Day {reward.dayNumber}: {reward.rewardType}");
+        // Save immediately so SaveSystem updates JSON file
+        if (SaveSystem.Instance != null)
+        {
+            SaveSystem.Instance.Save();
+        }
+
+        Debug.Log($"AUTO-CLAIMED Day {reward.dayNumber}: {reward.amount} {reward.rewardType}");
     }
 
     public void OpenPanel()

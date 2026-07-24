@@ -23,9 +23,10 @@ public class CurrencyUIDisplay : MonoBehaviour
 
     public void RefreshUI()
     {
-        if (GameManager.Instance == null) return;
+    if (GameManager.Instance == null) return;
 
-        if (gemText != null) gemText.text = GameManager.Instance.coins.ToString();
-        if (coinText != null) coinText.text = GameManager.Instance.gems.ToString();
+    // Fixed swapped assignments!
+    if (coinText != null) coinText.text = GameManager.Instance.coins.ToString();
+    if (gemText != null)  gemText.text  = GameManager.Instance.gems.ToString();
     }
 }

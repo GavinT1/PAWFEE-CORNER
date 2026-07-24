@@ -83,39 +83,28 @@ public class SettingsManager : MonoBehaviour
     //--- SAVE AND LOAD ------------------------------
     void SaveSettings()
     {
-        if (SaveSystem.Instance != null)
-        {
-            // Convert values over smoothly to save variables
-            GameData data = SaveSystem.Instance.Load();
-            if (data != null)
-            {
-                // If slider is completely turned down to 0, save as muted/false
-                data.musicOn = (musicSlider != null) ? (musicSlider.value > 0.01f) : true;
-                data.sfxOn = (sfxSlider != null) ? (sfxSlider.value > 0.01f) : true;
-            }
-            SaveSystem.Instance.Save();
-        }
+        if (musicSlider != null) PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
+        if (sfxSlider != null) PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
+        PlayerPrefs.Save();
     }
 
     void LoadSettings()
     {
-        if (SaveSystem.Instance == null) return;
+        float musicVal = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        float sfxVal = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
 
-        GameData data = SaveSystem.Instance.Load();
-        
-        // Re-align your UI element filling tracking metrics
         if (musicSlider != null)
         {
-            musicSlider.value = data.musicOn ? 1.0f : 0.0f;
-            if (musicSource != null) musicSource.volume = musicSlider.value;
-            if (SoundManager.Instance != null) SoundManager.Instance.SetMusicVolume(musicSlider.value);
+            musicSlider.value = musicVal;
+            if (musicSource != null) musicSource.volume = musicVal;
+            if (SoundManager.Instance != null) SoundManager.Instance.SetMusicVolume(musicVal);
         }
 
         if (sfxSlider != null)
         {
-            sfxSlider.value = data.sfxOn ? 1.0f : 0.0f;
-            if (sfxSource != null) sfxSource.volume = sfxSlider.value;
-            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxSlider.value);
+            sfxSlider.value = sfxVal;
+            if (sfxSource != null) sfxSource.volume = sfxVal;
+            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxVal);
         }
     }
 }

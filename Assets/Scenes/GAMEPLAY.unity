@@ -4587,7 +4587,7 @@ GameObject:
   - component: {fileID: 276754341}
   - component: {fileID: 276754342}
   m_Layer: 0
-  m_Name: COIN TEXT
+  m_Name: GEM TEXT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4609,7 +4609,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -409.8, y: -172.28}
+  m_AnchoredPosition: {x: -409.8, y: -374}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &276754341
@@ -11379,7 +11379,7 @@ GameObject:
   - component: {fileID: 782566926}
   - component: {fileID: 782566925}
   m_Layer: 0
-  m_Name: 'GEM TEXT '
+  m_Name: 'COIN TEXT '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11500,7 +11500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -413.87, y: -370.18}
+  m_AnchoredPosition: {x: -413.87, y: -168}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &798193869
@@ -15451,9 +15451,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 380705042}
-        m_TargetAssemblyTypeName: SaveSystem, Assembly-CSharp
-        m_MethodName: ResetAllGameData
+      - m_Target: {fileID: 1863311945}
+        m_TargetAssemblyTypeName: DevCheatMenu, Assembly-CSharp
+        m_MethodName: ResetGameSaveData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
