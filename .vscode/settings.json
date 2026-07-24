@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "PAWFEE-CORNER.sln"
+    "dotnet.defaultSolution": "PAWFEE-CORNER-main.sln"
 }
