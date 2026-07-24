@@ -4,13 +4,13 @@ using System.Collections;
 public class InteractiveCustomer : MonoBehaviour
 {
     [Header("Visual Character Settings")]
-    public SpriteRenderer characterSpriteRenderer; // Drag this object's own SpriteRenderer here
-    public Sprite[] customerSkins; // Assign different customer skin sprites in the inspector
+    public SpriteRenderer characterSpriteRenderer; 
+    public Sprite[] customerSkins; 
     public GameObject orderBubble;
     public GameObject coinPrefab;
 
     [Header("Bubble Position Tuning")]
-    private Vector3 bubbleLocalPosition = new Vector3(-1.5f, 1.25f, 0f); // Change X to move left/right, increase Y to move higher above head!
+    private Vector3 bubbleLocalPosition = new Vector3(-1.5f, 1.25f, 0f); 
 
     private Transform targetDestination;
     private CafeTable tableComponent;
@@ -34,14 +34,11 @@ public class InteractiveCustomer : MonoBehaviour
             orderBubble.transform.localPosition = bubbleLocalPosition;
         }
 
-        // ── MODULAR SKIN PICKER ENGINE ────────────────────────────────────────
-        // Automatically grabs the SpriteRenderer if it wasn't manually dragged in the inspector
         if (characterSpriteRenderer == null)
         {
             characterSpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        // Picks a random character skin asset from your array of 5 unique guests
         if (customerSkins != null && customerSkins.Length > 0 && characterSpriteRenderer != null)
         {
             int randomSkinIndex = Random.Range(0, customerSkins.Length);
@@ -114,29 +111,24 @@ public class InteractiveCustomer : MonoBehaviour
         
         if (orderBubble != null)
         {
-            // 1. Fetch your active recipe unlock states list array from the RecipeManager
             if (RecipeManager.Instance != null)
             {
                 bool[] unlockStates = RecipeManager.Instance.GetRecipeUnlockStates();
-                
-                // Count how many recipes are currently unlocked/purchased
                 System.Collections.Generic.List<int> unlockedIndices = new System.Collections.Generic.List<int>();
                 
                 for (int i = 0; i < unlockStates.Length; i++)
                 {
                     if (unlockStates[i])
                     {
-                        unlockedIndices.Add(i); // Add valid index choice (e.g., 0 for Coffee, 1 for Tea)
+                        unlockedIndices.Add(i);
                     }
                 }
 
-                // 2. Select a random index explicitly from your unlocked list choices array
                 if (unlockedIndices.Count > 0)
                 {
                     int randomIndexChooser = Random.Range(0, unlockedIndices.Count);
                     int chosenRecipeIndex = unlockedIndices[randomIndexChooser];
 
-                    // 3. Pass that specific chosen food index number to the order bubble script
                     OrderBubble bubbleScript = orderBubble.GetComponent<OrderBubble>();
                     if (bubbleScript != null)
                     {
@@ -145,7 +137,6 @@ public class InteractiveCustomer : MonoBehaviour
                 }
             }
 
-            // Fix: Ensures the bubble updates its location right when it becomes visible
             orderBubble.transform.localPosition = bubbleLocalPosition;
             orderBubble.SetActive(true);
         }
@@ -162,7 +153,18 @@ public class InteractiveCustomer : MonoBehaviour
 
     IEnumerator CookingAndEatingSequence()
     {
-        yield return new WaitForSeconds(2.0f);
+        // ── SPEED BOOSTER CHECK ──────────────────────────────────────
+        float cookDuration = 2.0f;
+        if (SpeedBoosterManager.Instance != null && SpeedBoosterManager.Instance.IsSpeedBoosterActive())
+        {
+            cookDuration = 0f; // Instant cook!
+        }
+
+        if (cookDuration > 0f)
+        {
+            yield return new WaitForSeconds(cookDuration);
+        }
+        // ─────────────────────────────────────────────────────────────
 
         float dynamicEatTime = tableComponent.GetCurrentEatTime();
         yield return new WaitForSeconds(dynamicEatTime);

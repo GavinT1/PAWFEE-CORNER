@@ -1,239 +1,201 @@
 using UnityEngine;
-using System;
+using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-using System.Collections.Concurrent;
-using UnityEngine.AI;
+using System;
+
+public enum RewardType
+{
+    Coins,
+    Gems,
+    XP,
+    SpeedBooster // Instant cook boost for 5 minutes
+}
+
+[System.Serializable]
+public class DailyReward
+{
+    public int dayNumber;          // 1 to 7
+    public RewardType rewardType;  
+    public int amount;             
+}
 
 public class DailyRewardManager : MonoBehaviour
-{   
+{
     public static DailyRewardManager Instance;
 
-    [Header("UI References")]
-    public GameObject dailyRewardPanel;
-    public TextMeshProUGUI streakText;
-    public TextMeshProUGUI rewardText;
-    public TextMeshProUGUI timerText;
+    [Header("7-Day Reward Config")]
+    public DailyReward[] rewards = new DailyReward[7];
 
-    [Header("Reward Tracking")]
-    public string lastClaimedDate = "";
-    public int currentStreak = 0;
+    [Header("UI Pop-up Elements")]
+    public GameObject rewardPanel;        
+    public TMP_Text rewardNotificationText;
+    public Button closeButton;            
 
-    private string[] rewardLabels = new string[]
-    {
-        "100 Coins",          // Day 1
-        "Speed Booster",      // Day 2
-        "Decoration Item",    // Day 3
-        "5 Gems",             // Day 4
-        "Rare Recipe",        // Day 5
-        "Mystery Box",        // Day 6
-        "Exclusive Furniture" // Day 7 
-    };
+    [Header("Day Item Visual Elements (Size = 7)")]
+    public GameObject[] daySlots;         
+    public TMP_Text[] rewardAmountTexts;  
+    public GameObject[] claimedOverlays;  
+
+    // Added these public fields so SaveSystem.cs can access them without CS1061 errors!
+    [HideInInspector] public string lastClaimedDate = "";
+    [HideInInspector] public int currentStreak = 0;
+
+    private const string LAST_CLAIM_KEY = "LastClaimDate";
+    private const string STREAK_KEY = "RewardStreakIndex";
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);  
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
     {
-        LoadDailyRewardData();
+        // Load saved values from PlayerPrefs into public properties
+        lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
+        currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
 
-        if(dailyRewardPanel != null) dailyRewardPanel.SetActive(false);
-
-        UpdateTimerUI();
+        CheckAndAutoClaim();
     }
 
-
-    //-- OPEN/CLOSE-----------------------------------
+    // Added method so MainMenuButtonScripts.cs can call it without CS1061 error!
     public void OpenDailyReward()
     {
-        if(dailyRewardPanel != null) dailyRewardPanel.SetActive(true);
-
-        UpdateRewardUI();
+        OpenPanel();
     }
 
-    public void CloseDailyReward()
+    public void CheckAndAutoClaim()
     {
-        if(dailyRewardPanel != null) dailyRewardPanel.SetActive(false);
-    }
-
-    //---CLAIM---------------------------------------------
-    public void ClaimReward()
-    {
-        if(!CanClaim())
+        if (CanClaimToday())
         {
-            Debug.Log("Daily reward already claimed. Come back tomorrow!");
-            return;
-        }
+            int streak = GetCurrentStreakIndex();
+            DailyReward rewardToClaim = rewards[streak];
 
-        // check if streak should reset
-        // if more than 48 hours passed, reset streak
-        if (lastClaimedDate != "")
-        {
-            DateTime lastClaimed = DateTime.Parse(lastClaimedDate);
-            double hoursSince = (DateTime.Now - lastClaimed).TotalHours;
+            // Grant the reward
+            GrantReward(rewardToClaim);
 
-            if (hoursSince > 48)
+            // Save date & streak
+            lastClaimedDate = DateTime.Now.Date.ToString("o");
+            PlayerPrefs.SetString(LAST_CLAIM_KEY, lastClaimedDate);
+
+            int nextStreak = (streak + 1) % 7;
+            currentStreak = nextStreak;
+            PlayerPrefs.SetInt(STREAK_KEY, nextStreak);
+            PlayerPrefs.Save();
+
+            // Display text in UI
+            if (rewardNotificationText != null)
             {
-                currentStreak = 0;
-                Debug.Log("Streak reset - you have been away for a while.");
+                if (rewardToClaim.rewardType == RewardType.SpeedBooster)
+                {
+                    rewardNotificationText.text = $"DAY {streak + 1} REWARD CLAIMED!\n+5 MIN SPEED BOOSTER";
+                }
+                else
+                {
+                    rewardNotificationText.text = $"DAY {streak + 1} REWARD CLAIMED!\n+{rewardToClaim.amount} {rewardToClaim.rewardType}";
+                }
             }
-        }
 
-        // advance streak (loops back after day 7)
-        currentStreak++;
-        if(currentStreak > 7) currentStreak = 1;
-
-        // give reward for current streak day
-        GiveReward(currentStreak);
-
-        //save claimed date
-        lastClaimedDate = DateTime.Now.ToString();
-
-        // add XP for claiming
-        if (GameManager.Instance != null) GameManager.Instance.AddXP(50);
-
-        // save everything
-        SaveDailyRewardData();
-        UpdateRewardUI();
-        UpdateTimerUI();
-    
-        Debug.Log("Daily Reward claimed! Day " + currentStreak);
-    }
-
-    //--- REWARD LOGIC ----------------------------------------
-    void GiveReward(int day)
-    {
-        switch (day)
-        {
-            case 1:
-                GameManager.Instance.AddCoins(100);
-                Debug.Log("reward: 100 Coins");
-            break;
-
-            case 2: 
-                GameManager.Instance.AddBoosterCharge();
-                Debug.Log("Reward: Speed Booster added to inventory! ");
-            break;
-
-            case 3:
-
-                Debug.Log("Reward: Decoration Item granted");
-            break;
-
-            case 4:
-                GameManager.Instance.AddGems(5);
-                Debug.Log("Reward: 5 Gems");
-            break;
-
-            case 5:
-
-                Debug.Log("Reward: Rare Recipe unloacked");
-            break;
-
-            case 6:
-
-                GiveMysteryBox();
-            break;
-
-            case 7:
-
-                Debug.Log("Reward: Exclusive Furniture granted!");
-            break;
-        }
-    }
-
-    void GiveMysteryBox()
-    {
-        int roll = UnityEngine.Random.Range(0,3);
-        switch (roll)
-        {
-            case 0:
-                GameManager.Instance.AddCoins(500);
-                Debug.Log("Mystery Box: 500 Coins!");
-            break;
-
-            case 1: 
-                GameManager.Instance.AddGems(10);
-                Debug.Log("Mystery Box: 10 Gems!");
-            break;
-
-            case 2:
-                GameManager.Instance.AddCoins(200);
-                GameManager.Instance.AddGems(5);
-                Debug.Log("Mystery Box: 200 Coins + Gems!");
-            break;
-        }
-    }
-
-    //---CLAIM CHECK--------------------------------------------
-    public bool CanClaim()
-    {
-        if(lastClaimedDate == "") return true;
-
-        DateTime lastClaimed = DateTime.Parse(lastClaimedDate);
-        double hoursSince = (DateTime.Now - lastClaimed).TotalHours;
-        return hoursSince >= 24;
-    }
-
-    //--- TIMER UNTIL NEXT CLAIM --------------------------------------
-    TimeSpan GetTimeUntilNextClaim()
-    {
-        if(lastClaimedDate == "") return TimeSpan.Zero;
-
-        DateTime lastClaimed = DateTime.Parse(lastClaimedDate);
-        DateTime nextClaim = lastClaimed.AddHours(24);
-        TimeSpan remaining = nextClaim - DateTime.Now;
-        return remaining.TotalSeconds > 0 ? remaining : TimeSpan.Zero;
-    }
-
-    //---UI--------------------------------------------------
-    void UpdateRewardUI()
-    {
-        if (streakText != null) streakText.text = "Day " + currentStreak + " / 7";
-        
-        int nextDay = currentStreak >= 7 ? 1 : currentStreak + 1;
-
-        if (rewardText != null) rewardText.text = "Next Reward: " + rewardLabels[Mathf.Clamp(nextDay - 1, 0, 6)];
-    }
-
-    void UpdateTimerUI()
-    {
-        if (timerText == null) return;
-
-        if (CanClaim())
-        {
-            timerText.text = "Reward ready!";
+            UpdateUIVisuals(nextStreak == 0 ? 7 : nextStreak);
+            OpenPanel();
         }
         else
         {
-            TimeSpan t = GetTimeUntilNextClaim();
-            timerText.text = string.Format("Next reward in {0:D2}:{1:D2}:{2:D2}",
-                t.Hours, t.Minutes, t.Seconds);
+            ClosePanel();
         }
     }
 
-    //--- SAVE/LOAD -----------------------------------
-    void SaveDailyRewardData()
+    public bool CanClaimToday()
     {
-        if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+        if (!PlayerPrefs.HasKey(LAST_CLAIM_KEY)) return true;
+
+        string lastClaimString = PlayerPrefs.GetString(LAST_CLAIM_KEY);
+        DateTime lastClaimDate;
+        if (!DateTime.TryParse(lastClaimString, out lastClaimDate)) return true;
+
+        DateTime today = DateTime.Now.Date;
+        return today > lastClaimDate;
     }
 
-    void LoadDailyRewardData()
+    private int GetCurrentStreakIndex()
     {
-        if (SaveSystem.Instance == null) return;
+        if (!PlayerPrefs.HasKey(LAST_CLAIM_KEY)) return 0;
 
-        GameData data = SaveSystem.Instance.Load();
-        lastClaimedDate = data.lastDailyRewardClaimed;
-        currentStreak = data.dailyRewardStreak;
+        string lastClaimString = PlayerPrefs.GetString(LAST_CLAIM_KEY);
+        DateTime lastClaimDate;
+        if (!DateTime.TryParse(lastClaimString, out lastClaimDate)) return 0;
+
+        DateTime today = DateTime.Now.Date;
+
+        if ((today - lastClaimDate).Days > 1)
+        {
+            currentStreak = 0;
+            PlayerPrefs.SetInt(STREAK_KEY, 0);
+            return 0;
+        }
+
+        currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
+        return currentStreak;
+    }
+
+    public void UpdateUIVisuals(int activeStreakIndex)
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (rewardAmountTexts != null && i < rewardAmountTexts.Length && rewardAmountTexts[i] != null)
+            {
+                if (i < rewards.Length && rewards[i] != null)
+                {
+                    if (rewards[i].rewardType == RewardType.SpeedBooster)
+                        rewardAmountTexts[i].text = "Speed Booster";
+                    else
+                        rewardAmountTexts[i].text = $"{rewards[i].amount} {rewards[i].rewardType}";
+                }
+            }
+
+            if (claimedOverlays != null && i < claimedOverlays.Length && claimedOverlays[i] != null)
+            {
+                claimedOverlays[i].SetActive(i < activeStreakIndex);
+            }
+        }
+    }
+
+    private void GrantReward(DailyReward reward)
+    {
+        switch (reward.rewardType)
+        {
+            case RewardType.Coins:
+                if (GameManager.Instance != null)
+                {
+                    // Add coins if applicable
+                }
+                break;
+
+            case RewardType.XP:
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.AddXP(reward.amount);
+                }
+                break;
+
+            case RewardType.SpeedBooster:
+                if (SpeedBoosterManager.Instance != null)
+                {
+                    SpeedBoosterManager.Instance.ActivateSpeedBooster(300f); // 300 seconds (5 mins)
+                }
+                break;
+        }
+
+        Debug.Log($"AUTO-CLAIMED Day {reward.dayNumber}: {reward.rewardType}");
+    }
+
+    public void OpenPanel()
+    {
+        if (rewardPanel != null) rewardPanel.SetActive(true);
+    }
+
+    public void ClosePanel()
+    {
+        if (rewardPanel != null) rewardPanel.SetActive(false);
     }
 }
