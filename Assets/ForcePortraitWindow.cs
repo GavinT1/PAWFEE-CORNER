@@ -7,14 +7,14 @@ public class ForcePortraitWindow : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         #if UNITY_STANDALONE && !UNITY_EDITOR
-            // Enables the window borders so users can click and drag the edges to resize it freely!
+            // Enables windowed mode so the user can see the full mobile frame
             Screen.fullScreenMode = FullScreenMode.Windowed;
 
-            // Calculates a safe dynamic height based on the player's active monitor screen height
-            int calculatedHeight = Mathf.RoundToInt(Screen.currentResolution.height * 0.75f);
+            // Calculates height dynamically based on monitor height
+            int calculatedHeight = Mathf.RoundToInt(Screen.currentResolution.height * 0.8f);
             
-            // Keeps a perfect 3:4 aspect ratio scale matching the iPad frame dimensions
-            int calculatedWidth = Mathf.RoundToInt(calculatedHeight * 0.75f);
+            // Forces 9:16 portrait ratio (1080x1920 ratio = 9/16 = 0.5625)
+            int calculatedWidth = Mathf.RoundToInt(calculatedHeight * (9f / 16f));
             
             Screen.SetResolution(calculatedWidth, calculatedHeight, FullScreenMode.Windowed);
         #endif
