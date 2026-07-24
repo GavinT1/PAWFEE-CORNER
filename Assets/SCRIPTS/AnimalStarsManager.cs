@@ -52,7 +52,7 @@ public class AnimalStarsManager : MonoBehaviour
     {
         // active play grants +0.25 stars every 75 seconds
         passiveTimer += Time.deltaTime;
-        if(passiveTimer >= RecoveryInterval)
+        if (passiveTimer >= RecoveryInterval)
         {
             passiveTimer = 0f;
             AddStars(PassiveReward);
@@ -83,7 +83,7 @@ public class AnimalStarsManager : MonoBehaviour
     {
         currentServingStreak++;
 
-        if(currentServingStreak == 5)
+        if (currentServingStreak == 5)
         {
             float bonus = animalStars < 2.5f ? 0.15f : 0.25f;
             AddStars(0.25f);
@@ -111,11 +111,11 @@ public class AnimalStarsManager : MonoBehaviour
     // called by customerspawner to slowdown if reputation drops
     public float GetSpawnRateMultiplier()
     {
-        if(animalStars < 1.5f) return 0.6f;
+        if (animalStars < 1.5f) return 0.6f;
         return 1.0f; 
     }
 
-    //--- SYSTEM ARCHITECTURE-------------------------------------------\
+    //--- SYSTEM ARCHITECTURE-------------------------------------------
     void UpdateUI()
     {
         // 1. Maintain your original text display formatting strings safely
@@ -131,24 +131,19 @@ public class AnimalStarsManager : MonoBehaviour
         {
             if (starImages[i] != null)
             {
-                // The baseline value required to start filling this specific star (e.g., 1.0 for Star_0, 2.0 for Star_1)
                 float targetStarBaseline = i + 1f;
 
                 if (animalStars >= targetStarBaseline)
                 {
-                    // If your total score is higher than this star's limit, it is 100% full
                     starImages[i].fillAmount = 1f;
                 }
                 else if (animalStars > targetStarBaseline - 1f)
                 {
-                    // If your score is currently inside this star's fraction zone (e.g., 3.4 is inside Star_3's zone)
-                    // Calculate the exact fractional remainder (e.g., 3.4 - 3.0 = 0.4 fill amount)
                     float remainderFraction = animalStars - (targetStarBaseline - 1f);
                     starImages[i].fillAmount = Mathf.Clamp01(remainderFraction);
                 }
                 else
                 {
-                    // If your score hasn't even reached this star's zone yet, it stays completely empty
                     starImages[i].fillAmount = 0f;
                 }
             }
@@ -169,9 +164,14 @@ public class AnimalStarsManager : MonoBehaviour
         {
             GameData data = SaveSystem.Instance.Load();
 
-            if (data.animalStars >= MinStars && data.animalStars <= MaxStars) animalStars = data.animalStars;
+            if (data != null && data.animalStars >= MinStars && data.animalStars <= MaxStars) 
+            {
+                animalStars = data.animalStars;
+            }
             else
+            {
                 animalStars = 1.0f;
+            }
         }
     }
 }

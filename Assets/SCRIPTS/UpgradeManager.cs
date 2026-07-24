@@ -15,7 +15,7 @@ public class UpgradeManager : MonoBehaviour
     public Sprite checkmarkButtonSprite;
     public Sprite normalButtonSprite;
 
-    // ADDED: Your new custom UI modifiers for the Upgrade Panel
+    // Custom UI modifiers for the Upgrade Panel
     [Header("Custom Upgrade UI Button Modifiers")]
     public Image[] upgradeButtonImages;
     public Sprite notOwnedUpgradeButtonSprite;
@@ -89,25 +89,8 @@ public class UpgradeManager : MonoBehaviour
 
     void Start()
     {   
-        if (SaveSystem.Instance != null)
-        {
-            GameData data = SaveSystem.Instance.Load();
-            
-            if (data != null && data.tableUnlockedStates != null && data.tableUnlockedStates.Length == tables.Length)
-            {
-                for (int i = 0; i < tables.Length; i++)
-                {
-                    if (tables[i] != null)
-                    {
-                        tables[i].isUnlocked = data.tableUnlockedStates[i];
-                        tables[i].tableLevel = data.tableTiers[i];
-                        
-                        tables[i].gameObject.SetActive(data.tableUnlockedStates[i]);
-                    }
-                }
-            }
-        }
-        
+        // ── FIXED: Removed premature SaveSystem.Instance.Load() call from Start()
+        // GameManager / SaveSystem coordinates initial loading safely to avoid overwriting 0 coins.
         UpdateUpgradeUI();
     }
 
@@ -141,12 +124,13 @@ public class UpgradeManager : MonoBehaviour
                     return;
                 }
 
-                if (GameManager.Instance.SpendCoins(unlockCosts[index]))
+                if (GameManager.Instance != null && GameManager.Instance.SpendCoins(unlockCosts[index]))
                 {
                     targetTable.isUnlocked = true;
                     targetTable.gameObject.SetActive(true);
                     GameManager.Instance.AddXP(25);
                     UpdateUpgradeUI();
+                    
                     if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
                 }
                 else
@@ -168,7 +152,7 @@ public class UpgradeManager : MonoBehaviour
             if (playerLevel < requiredLevel) return;
 
             int cost = tierCosts[currentTier];
-            if (GameManager.Instance.SpendCoins(cost))
+            if (GameManager.Instance != null && GameManager.Instance.SpendCoins(cost))
             {
                 targetTable.tableLevel++;
                 GameManager.Instance.AddXP(25);
@@ -179,7 +163,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    void UpdateUpgradeUI()
+    public void UpdateUpgradeUI()
     {
         int playerLevel = LevelSystem.Instance != null ? LevelSystem.Instance.currentLevel : 1;
 
@@ -234,7 +218,6 @@ public class UpgradeManager : MonoBehaviour
                     if (hasDesc && currentPageIndex == 1) 
                         descriptionTexts[i].text = "unlock this table in the buy panel layout first.";
 
-                    // ADDED: Swap to 'not owned yet' lock button UI sprite
                     if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && notOwnedUpgradeButtonSprite != null)
                     {
                         upgradeButtonImages[i].sprite = notOwnedUpgradeButtonSprite;
@@ -250,7 +233,6 @@ public class UpgradeManager : MonoBehaviour
                         if (hasDesc && currentPageIndex == 1) 
                             descriptionTexts[i].text = $"tier {currentTier} (max)\nincome: +{currentTier} coins";
 
-                        // ADDED: Swap to green 'max level' button UI sprite
                         if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && maxUpgradeButtonSprite != null)
                         {
                             upgradeButtonImages[i].sprite = maxUpgradeButtonSprite;
@@ -264,7 +246,6 @@ public class UpgradeManager : MonoBehaviour
                         if (hasDesc && currentPageIndex == 1) 
                             descriptionTexts[i].text = $"tier {currentTier} -> tier {currentTier + 1}\nincome: +{currentTier} -> +{currentTier + 1} coins";
 
-                        // ADDED: Swap to standard active upgrade button UI sprite
                         if (upgradeButtonImages != null && i < upgradeButtonImages.Length && upgradeButtonImages[i] != null && normalUpgradeButtonSprite != null)
                         {
                             upgradeButtonImages[i].sprite = normalUpgradeButtonSprite;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Globalization;
 
 [System.Serializable]
 public class GameData
@@ -62,7 +63,7 @@ public class SaveSystem : MonoBehaviour
             Destroy(gameObject);
         }
 
-        savePath = Application.persistentDataPath + "/pawfeesave.json";
+        savePath = Path.Combine(Application.persistentDataPath, "pawfeesave.json");
     }
 
     // ── SAVE ───────────────────────────────────────
@@ -101,10 +102,10 @@ public class SaveSystem : MonoBehaviour
         data.dailyRewardStreak      = DailyRewardManager.Instance != null
             ? DailyRewardManager.Instance.currentStreak : 0;
 
-        // Last session time
-        data.lastSessionTime = System.DateTime.Now.ToString();
+        // Last session time (FIXED: InvariantCulture for universal ISO format)
+        data.lastSessionTime = System.DateTime.Now.ToString("o", CultureInfo.InvariantCulture);
 
-        // Settings (Check slider if open, otherwise check PlayerPrefs)
+        // Settings
         if (SettingsManager.Instance != null && SettingsManager.Instance.musicSlider != null)
         {
             data.musicOn = SettingsManager.Instance.musicSlider.value > 0.01f;
@@ -123,7 +124,7 @@ public class SaveSystem : MonoBehaviour
             data.sfxOn = PlayerPrefs.GetFloat("SFXVolume", 1.0f) > 0.01f;
         }
 
-        // saving recipes
+        // Saving recipes
         if (RecipeManager.Instance != null)
         {
             data.recipeUnlocks = RecipeManager.Instance.GetRecipeUnlockStates();
@@ -143,8 +144,9 @@ public class SaveSystem : MonoBehaviour
     {
         if (!File.Exists(savePath))
         {
-            Debug.Log("No save file found. Starting fresh.");
-            return GetDefaultData();
+            Debug.Log("No save file found. Creating default data.");
+            GameData defaultData = GetDefaultData();
+            return defaultData;
         }
 
         string json = File.ReadAllText(savePath);
@@ -163,21 +165,8 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    // ── COMPLETE DATA RESET ────────────────────────
-    public void ResetAllGameData()
-    {
-        // 1. Delete JSON File
-        DeleteSave();
-
-        // 2. Wipe PlayerPrefs (Daily Reward Keys & Settings)
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
-
-        Debug.Log("ALL SAVE DATA AND PLAYERPREFS WIPED CLEAN!");
-    }
-
     // ── DEFAULT DATA ───────────────────────────────
-    GameData GetDefaultData()
+    public GameData GetDefaultData()
     {
         return new GameData
         {
@@ -190,14 +179,14 @@ public class SaveSystem : MonoBehaviour
             recipeLevel            = 1,
             is2xActive             = false,
             boosterEndTime         = "",
-            lastSessionTime        = System.DateTime.Now.ToString(),
+            lastSessionTime        = System.DateTime.Now.ToString("o", CultureInfo.InvariantCulture),
             lastDailyRewardClaimed = "",
             dailyRewardStreak      = 0,
             animalStars            = 1.0f,
             musicOn                = true,
             sfxOn                  = true,
             recipeUnlocks          = new bool[] { true, false, false, false, false },
-            tableUnlockedStates    = new bool[] { true, false, false, false, false }, // First table is unlocked
+            tableUnlockedStates    = new bool[] { true, false, false, false, false },
             tableTiers             = new int[] { 1, 1, 1, 1, 1 },  
         };
     }

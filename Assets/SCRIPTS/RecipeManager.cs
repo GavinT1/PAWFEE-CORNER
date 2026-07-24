@@ -31,7 +31,6 @@ public class RecipeManager : MonoBehaviour
     private int[] recipeCoinRewards = new int[] { 20, 25, 35, 50, 75 }; 
     private int[] recipePurchaseCosts = new int[] { 100, 800, 6000, 45000, 300000 }; 
 
-    // ── FIXED: Added unique descriptions for every recipe from your GDD ──
     private string[] recipeDescriptions = new string[]
     {
         "A warm cup of freshly brewed black coffee. Simple and full of caffeine.",
@@ -41,7 +40,7 @@ public class RecipeManager : MonoBehaviour
         "Our signature house specialty premium blend. With a hint of catnip for that extra kick!"
     };
 
-    private bool[] isRecipePurchased = new bool[] { true, false, false, false, false }; 
+    public bool[] isRecipePurchased = new bool[] { true, false, false, false, false }; 
     private int currentlySelectedRecipeIndex = 0; 
 
     private void Awake()
@@ -54,16 +53,6 @@ public class RecipeManager : MonoBehaviour
     {
         if (recipePanel != null)
             recipePanel.SetActive(false);
-
-        // Load data from file
-        if (SaveSystem.Instance != null)
-        {
-            GameData loadedData = SaveSystem.Instance.Load();
-            if (loadedData != null && loadedData.recipeUnlocks != null && loadedData.recipeUnlocks.Length == isRecipePurchased.Length)
-            {
-                isRecipePurchased = loadedData.recipeUnlocks;
-            }
-        }
     }
 
     public void OpenRecipePanel()
@@ -83,7 +72,6 @@ public class RecipeManager : MonoBehaviour
             recipePanel.SetActive(false);
 
         if (SoundManager.Instance != null) SoundManager.Instance.PlayPanelClose();
-
     }
 
     public void RefreshRecipeUI()
@@ -110,7 +98,6 @@ public class RecipeManager : MonoBehaviour
                     : new Color(0.15f, 0.15f, 0.15f, 1f); 
             }
 
-            // ── FIXED: Removed all emoji characters that print as broken box symbols ──
             if (i < statusTexts.Length && statusTexts[i] != null)
             {
                 if (alreadyOwned)
@@ -147,7 +134,6 @@ public class RecipeManager : MonoBehaviour
             }
         }
 
-        // ── FIXED: Updates to pull the specific description matching the item clicked ──
         if (infoDescriptionText != null && index < recipeDescriptions.Length)
         {
             infoDescriptionText.text = recipeDescriptions[index];
@@ -207,13 +193,13 @@ public class RecipeManager : MonoBehaviour
 
         if (GameManager.Instance != null && GameManager.Instance.coins >= cost)
         {
-            GameManager.Instance.coins -= cost;
+            GameManager.Instance.SpendCoins(cost);
             isRecipePurchased[index] = true;
 
             RefreshRecipeUI();
             SelectRecipeCard(index);
 
-            if (SaveSystem.Instance != null) SaveSystem.Instance.Save();
+            if (GameManager.Instance != null) GameManager.Instance.SaveGame();
         }
     }
 

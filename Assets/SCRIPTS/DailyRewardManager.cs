@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
+using System.Globalization;
 using TMPro;
 
 public enum RewardType
@@ -8,13 +10,13 @@ public enum RewardType
     Coins,
     Gems,
     XP,
-    SpeedBooster // Instant cook boost for 5 minutes
+    SpeedBooster
 }
 
 [System.Serializable]
 public class DailyReward
 {
-    public int dayNumber;          // 1 to 7
+    public int dayNumber;          
     public RewardType rewardType;  
     public int amount;             
 }
@@ -36,7 +38,6 @@ public class DailyRewardManager : MonoBehaviour
     public TMP_Text[] rewardAmountTexts;  
     public GameObject[] claimedOverlays;  
 
-    // Added these public fields so SaveSystem.cs can access them without CS1061 errors!
     [HideInInspector] public string lastClaimedDate = "";
     [HideInInspector] public int currentStreak = 0;
 
@@ -49,8 +50,12 @@ public class DailyRewardManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        // WAIT 2 FRAMES to strictly guarantee GameManager and SaveSystem complete their Load() sequence first
+        yield return null;
+        yield return null;
+
         lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
         currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
 
@@ -59,7 +64,6 @@ public class DailyRewardManager : MonoBehaviour
         CheckAndAutoClaim();
     }
 
-    // Added method so MainMenuButtonScripts.cs can call it without CS1061 error!
     public void OpenDailyReward()
     {
         OpenPanel();
@@ -72,17 +76,15 @@ public class DailyRewardManager : MonoBehaviour
             int streak = GetCurrentStreakIndex();
             DailyReward rewardToClaim = rewards[streak];
 
-            // Grant the reward
             GrantReward(rewardToClaim);
 
-            // ── FIXED: Plays daily reward sound upon successful item claim ─────
             if (SoundManager.Instance != null)
             {
                 SoundManager.Instance.PlayDailyReward();
             }
 
-            // Save date & streak
-            lastClaimedDate = DateTime.Now.Date.ToString("o");
+            // Save date in ISO standard format
+            lastClaimedDate = DateTime.Now.Date.ToString("o", CultureInfo.InvariantCulture);
             PlayerPrefs.SetString(LAST_CLAIM_KEY, lastClaimedDate);
 
             int nextStreak = (streak + 1) % 7;
@@ -90,7 +92,6 @@ public class DailyRewardManager : MonoBehaviour
             PlayerPrefs.SetInt(STREAK_KEY, nextStreak);
             PlayerPrefs.Save();
 
-            // Display text in UI
             if (rewardNotificationText != null)
             {
                 if (rewardToClaim.rewardType == RewardType.SpeedBooster)
@@ -118,7 +119,7 @@ public class DailyRewardManager : MonoBehaviour
 
         string lastClaimString = PlayerPrefs.GetString(LAST_CLAIM_KEY);
         DateTime lastClaimDate;
-        if (!DateTime.TryParse(lastClaimString, out lastClaimDate)) return true;
+        if (!DateTime.TryParse(lastClaimString, CultureInfo.InvariantCulture, DateTimeStyles.None, out lastClaimDate)) return true;
 
         DateTime today = DateTime.Now.Date;
         return today > lastClaimDate;
@@ -130,7 +131,7 @@ public class DailyRewardManager : MonoBehaviour
 
         string lastClaimString = PlayerPrefs.GetString(LAST_CLAIM_KEY);
         DateTime lastClaimDate;
-        if (!DateTime.TryParse(lastClaimString, out lastClaimDate)) return 0;
+        if (!DateTime.TryParse(lastClaimString, CultureInfo.InvariantCulture, DateTimeStyles.None, out lastClaimDate)) return 0;
 
         DateTime today = DateTime.Now.Date;
 
@@ -181,7 +182,7 @@ public class DailyRewardManager : MonoBehaviour
             case RewardType.Gems:
                 if (GameManager.Instance != null)
                 {
-                    GameManager.Instance.gems += reward.amount;
+                    GameManager.Instance.AddGems(reward.amount);
                 }
                 break;
 
@@ -195,15 +196,15 @@ public class DailyRewardManager : MonoBehaviour
             case RewardType.SpeedBooster:
                 if (SpeedBoosterManager.Instance != null)
                 {
-                    SpeedBoosterManager.Instance.ActivateSpeedBooster(300f); // 300 seconds (5 mins)
+                    SpeedBoosterManager.Instance.ActivateSpeedBooster(300f);
                 }
                 break;
         }
 
-        // Save immediately so SaveSystem updates JSON file
-        if (SaveSystem.Instance != null)
+        if (GameManager.Instance != null)
         {
-            SaveSystem.Instance.Save();
+            GameManager.Instance.UpdateUI();
+            GameManager.Instance.SaveGame();
         }
 
         Debug.Log($"AUTO-CLAIMED Day {reward.dayNumber}: {reward.amount} {reward.rewardType}");
@@ -213,7 +214,6 @@ public class DailyRewardManager : MonoBehaviour
     {
         if (rewardPanel != null) rewardPanel.SetActive(true);
 
-        // ── FIXED: Plays a panel open clip when dashboard displays ───────────
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlayPanelOpen();
@@ -224,7 +224,6 @@ public class DailyRewardManager : MonoBehaviour
     {
         if (rewardPanel != null) rewardPanel.SetActive(false);
 
-        // ── FIXED: Plays a panel close clip when dashboard dismisses ─────────
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlayPanelClose();
