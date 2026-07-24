@@ -51,12 +51,14 @@ public class DailyRewardManager : MonoBehaviour
 
     private void Start()
     {
-        // Load saved values from PlayerPrefs into public properties
-        lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
-        currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
 
-        CheckAndAutoClaim();
-    }
+    lastClaimedDate = PlayerPrefs.GetString(LAST_CLAIM_KEY, "");
+    currentStreak = PlayerPrefs.GetInt(STREAK_KEY, 0);
+
+    UpdateUIVisuals(currentStreak);
+
+    CheckAndAutoClaim();
+   }
 
     // Added method so MainMenuButtonScripts.cs can call it without CS1061 error!
     public void OpenDailyReward()

@@ -166,6 +166,19 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    // ── COMPLETE DATA RESET ────────────────────────
+    public void ResetAllGameData()
+    {
+        // 1. Delete JSON File
+        DeleteSave();
+
+        // 2. Wipe PlayerPrefs (Daily Reward Keys)
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
+        Debug.Log("ALL SAVE DATA AND PLAYERPREFS WIPED CLEAN!");
+    }
+
     // ── DEFAULT DATA ───────────────────────────────
     GameData GetDefaultData()
     {
@@ -191,5 +204,4 @@ public class SaveSystem : MonoBehaviour
             tableTiers             = new int[] { 1, 1, 1, 1, 1 },  
         };
     }
-
 }
